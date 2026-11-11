@@ -1,8 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// Fase — agrupamento macro do cronograma (Planejamento, Análise, etc.)
+// ============================================================
+model Fase {
+  id        String  @id @default(cuid())
+  ordem     Int
+  nome      String
+  descricao String?
+  etapas    Etapa[]
+
+  @@map("fases")
+}
+
+// ============================================================
+// Etapa — unidade atômica do planejamento do TCC
+// ============================================================
+model Etapa {
+  id          String     @id @default(cuid())
+  faseId      String
+  fase        Fase       @relation(fields: [faseId], references: [id], onDelete: Cascade)
+  ordem       Int
+  titulo      String
+  objetivo    String
+  entregaveis String[]
+  dod         String[]
+  inicio      DateTime
+  fim         DateTime
+  status      String     @default("pendente")
+  progresso   Int        @default(0)
+  specKit     String?
+  anotacoes   Anotacao[]
+  lembretes   Lembrete[]
+
+  @@index([faseId, ordem])
+  @@map("etapas")
+}
+
+// ============================================================
+// Anotacao — registro livre do usuário sobre uma etapa
+// ============================================================
+model Anotacao {
+  id           String   @id @default(cuid())
+  etapaId      String
+  etapa        Etapa    @relation(fields: [etapaId], references: [id], onDelete: Cascade)
+  conteudo     String
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+
+  @@map("anotacoes")
+}
+
+// ============================================================
+// Lembrete — agendamento de notificação por etapa
+// ============================================================
+model Lembrete {
+  id        String   @id @default(cuid())
+  etapaId   String
+  etapa     Etapa    @relation(fields: [etapaId], references: [id], onDelete: Cascade)
+  diasAntes Int
+  canal     String   @default("ambos")
+  enviado   Boolean  @default(false)
+  criadoEm  DateTime @default(now())
+
+  @@index([etapaId, enviado])
+  @@map("lembretes")
 }

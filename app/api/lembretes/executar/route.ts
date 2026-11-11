@@ -2,7 +2,15 @@ import { NextResponse } from "next/server";
 import { enviarEmailLembrete } from "@/lib/email";
 import { prisma } from "@/lib/prisma";
 
-export async function POST() {
+export async function POST(request: Request) {
+  const cronSecret = process.env.CRON_SECRET;
+  if (
+    cronSecret !== undefined &&
+    request.headers.get("authorization") !== `Bearer ${cronSecret}`
+  ) {
+    return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
+  }
+
   const emailDestino = process.env.LEMBRETE_EMAIL_DESTINO;
   const smtpObrigatorias = ["SMTP_HOST", "SMTP_PORT", "SMTP_USER", "SMTP_PASS", "SMTP_FROM"];
   const smtpAusentes = smtpObrigatorias.filter((variavel) => !process.env[variavel]);

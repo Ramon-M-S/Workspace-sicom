@@ -43,10 +43,10 @@
 - [x] 4.1 Geração de `.ics` por etapa
 - [x] 4.2 Botão “Adicionar ao Google Agenda”
 - [x] 4.3 Envio de e-mail com Nodemailer
-- [ ] 4.4 Cron de lembretes (7d, 1d, 0d)
+- [x] 4.4 Cron de lembretes (7d, 1d, 0d)
 
 ## Fase 5 — Qualidade
 
-- [ ] 5.1 Testes unitários com Vitest
-- [ ] 5.2 Smoke test com Playwright (opcional)
-- [ ] 5.3 Build de produção validado
+- [x] 5.1 Testes unitários com Vitest
+- [x] 5.2 Smoke test com Playwright 
+- [x] 5.3 Build de produção validado

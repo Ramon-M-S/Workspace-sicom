@@ -1,9 +1,11 @@
 "use client";
 
-import { Menu } from "lucide-react";
+import { useState } from "react";
+import { Menu, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { NovaEtapaDialog } from "@/components/etapas/nova-etapa-dialog";
+import { BuscaGlobal } from "@/components/layout/busca-global";
 import {
   Sheet,
   SheetContent,
@@ -16,6 +18,8 @@ type HeaderProps = {
 };
 
 export function Header({ title = "TCC SICOM" }: HeaderProps) {
+  const [buscaAberta, setBuscaAberta] = useState(false);
+
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-background px-6">
       <Sheet>
@@ -30,8 +34,18 @@ export function Header({ title = "TCC SICOM" }: HeaderProps) {
       </Sheet>
 
       <h2 className="flex-1 text-base font-semibold">{title}</h2>
+      <Button
+        variant="outline"
+        className="hidden w-64 justify-start text-muted-foreground sm:flex"
+        onClick={() => setBuscaAberta(true)}
+      >
+        <Search className="mr-2 h-4 w-4" />
+        Buscar...
+        <kbd className="ml-auto text-xs">Ctrl K</kbd>
+      </Button>
       <Badge variant="secondary">2026.2</Badge>
       <NovaEtapaDialog />
+      <BuscaGlobal open={buscaAberta} onOpenChange={setBuscaAberta} />
     </header>
   );
 }

@@ -1,7 +1,5 @@
 import "dotenv/config";
-import { PrismaClient } from "../lib/generated/prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/prisma";
 
 const fases = [
   { id: "fase-planejamento", ordem: 1, nome: "Planejamento" },
@@ -40,7 +38,18 @@ const etapas = [
   { id: "m05-defesa", faseId: "fase-monografia", ordem: 5, titulo: "M05 Defesa", objetivo: "Apresentar e defender os resultados do TCC SICOM perante a banca.", entregaveis: ["Apresentação do trabalho", "Registro das considerações da banca"], dod: ["Defesa realizada", "Recomendações da banca registradas"], inicio: "2027-03-15", fim: "2027-03-15", specKit: null },
 ] as const;
 
-async function main() {
+export async function executarSeed() {
+  await prisma.configuracao.upsert({
+    where: { id: "singleton" },
+    create: {
+      id: "singleton",
+      nomeProjeto: "TCC - SICOM",
+      ativoLembretes: true,
+      diasAntecedencia: 7,
+    },
+    update: {},
+  });
+
   for (const fase of fases) {
     await prisma.fase.upsert({
       where: { id: fase.id },
@@ -87,12 +96,3 @@ async function main() {
     `Seed concluído: ${fases.length} fases, ${etapas.length} etapas e ${etapas.length * 3} lembretes criados/atualizados.`,
   );
 }
-
-main()
-  .catch((error: unknown) => {
-    console.error("Erro ao executar o seed:", error);
-    process.exitCode = 1;
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });

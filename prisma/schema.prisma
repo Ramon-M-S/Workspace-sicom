@@ -14,6 +14,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Configuracao {
+  id               String   @id @default("singleton")
+  nomeProjeto      String   @default("TCC - SICOM")
+  dataInicio       DateTime @default(now())
+  dataDefesa       DateTime?
+  emailLembrete    String?
+  ativoLembretes   Boolean  @default(true)
+  diasAntecedencia Int      @default(7)
+  atualizadoEm     DateTime @updatedAt
+
+  @@map("configuracoes")
+}
+
 // ============================================================
 // Fase — agrupamento macro do cronograma (Planejamento, Análise, etc.)
 // ============================================================

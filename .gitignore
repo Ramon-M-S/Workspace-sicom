@@ -36,3 +36,13 @@ pnpm-debug.log*
 Thumbs.db
 .vscode/
 !.vscode/extensions.json
+/lib/generated/prisma
+
+lib/generated/
+
+
+# Prisma backup local
+_prisma_backup/
+
+# TypeScript build info
+*.tsbuildinfo

@@ -11,20 +11,29 @@ export async function POST(request: Request) {
     return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
   }
 
-  const emailDestino = process.env.LEMBRETE_EMAIL_DESTINO;
-  const smtpObrigatorias = ["SMTP_HOST", "SMTP_PORT", "SMTP_USER", "SMTP_PASS", "SMTP_FROM"];
-  const smtpAusentes = smtpObrigatorias.filter((variavel) => !process.env[variavel]);
-  if (smtpAusentes.length) {
-    return NextResponse.json(
-      { erro: `Configure as variáveis SMTP no ambiente: ${smtpAusentes.join(", ")}.` },
-      { status: 500 },
-    );
-  }
-  if (!emailDestino) {
-    return NextResponse.json({ erro: "Configure LEMBRETE_EMAIL_DESTINO no ambiente." }, { status: 500 });
-  }
-
   try {
+    const configuracao = await prisma.configuracao.upsert({
+      where: { id: "singleton" },
+      create: { id: "singleton" },
+      update: {},
+    });
+    if (!configuracao.ativoLembretes) {
+      return NextResponse.json({ enviados: 0, mensagem: "Desativado" });
+    }
+
+    const emailDestino = configuracao.emailLembrete || process.env.LEMBRETE_EMAIL_DESTINO;
+    const smtpObrigatorias = ["SMTP_HOST", "SMTP_PORT", "SMTP_USER", "SMTP_PASS", "SMTP_FROM"];
+    const smtpAusentes = smtpObrigatorias.filter((variavel) => !process.env[variavel]);
+    if (smtpAusentes.length) {
+      return NextResponse.json(
+        { erro: `Configure as variáveis SMTP no ambiente: ${smtpAusentes.join(", ")}.` },
+        { status: 500 },
+      );
+    }
+    if (!emailDestino) {
+      return NextResponse.json({ erro: "Configure LEMBRETE_EMAIL_DESTINO no ambiente." }, { status: 500 });
+    }
+
     // Valida SMTP antes de processar os lembretes para responder com erro claro de configuração.
     const pendentes = await prisma.lembrete.findMany({
       where: { enviado: false },

@@ -1,13 +1,7 @@
 import Link from "next/link";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import {
-  AlertTriangle,
-  ArrowRight,
-  CheckCircle2,
-  Clock,
-  TrendingUp,
-} from "lucide-react";
+import { AlertTriangle, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,25 +11,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { buscarDadosDashboard } from "@/lib/queries/dashboard";
-
-function BarraProgresso({ percent }: { percent: number }) {
-  const valor = Math.min(100, Math.max(0, percent));
-
-  return (
-    <div
-      className="h-2 w-full rounded-full bg-muted"
-      role="progressbar"
-      aria-valuemin={0}
-      aria-valuemax={100}
-      aria-valuenow={valor}
-    >
-      <div
-        className="h-2 rounded-full bg-primary transition-all"
-        style={{ width: `${valor}%` }}
-      />
-    </div>
-  );
-}
+import { BotaoExportarPdf } from "@/components/dashboard/botao-exportar-pdf";
+import { GraficoProgresso } from "@/components/dashboard/grafico-progresso";
+import { GraficoFases } from "@/components/dashboard/grafico-fases";
 
 function formatarData(data: string) {
   return format(new Date(data), "dd/MM/yyyy", { locale: ptBR });
@@ -50,89 +28,80 @@ function textoDias(dias: number) {
 export default async function DashboardPage() {
   const dados = await buscarDadosDashboard();
 
-  if (dados.totais.etapas === 0) {
-    return (
-      <Card>
-        <CardContent className="py-12 text-center">
-          <p className="text-muted-foreground">
-            Nenhuma etapa cadastrada. Rode o seed do banco.
-          </p>
-        </CardContent>
-      </Card>
-    );
-  }
-
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold">Dashboard</h1>
-        <p className="text-muted-foreground">Acompanhe o progresso do TCC SICOM.</p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold">Dashboard</h1>
+          <p className="text-muted-foreground">Acompanhe o progresso do TCC SICOM.</p>
+        </div>
+        <BotaoExportarPdf etapas={dados.etapas} fases={dados.fases} />
       </div>
 
+      {dados.totais.etapas === 0 ? (
+        <Card>
+          <CardContent className="py-12 text-center">
+            <p className="text-muted-foreground">
+              Nenhuma etapa cadastrada. Rode o seed do banco.
+            </p>
+          </CardContent>
+        </Card>
+      ) : (
+      <>
       <section
         aria-label="Resumo do projeto"
         className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4"
       >
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Progresso geral</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            </div>
+        <Card className="flex h-[120px] flex-col">
+          <CardHeader className="p-3 pb-0">
+            <CardTitle className="text-sm font-normal text-muted-foreground">Progresso geral</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            <p className="text-3xl font-semibold">{dados.totais.progressoGeral}%</p>
-            <BarraProgresso percent={dados.totais.progressoGeral} />
+          <CardContent className="flex min-h-0 flex-1 items-center justify-center p-1">
+            <GraficoProgresso
+              concluidas={dados.totais.concluidas}
+              emAndamento={dados.totais.emAndamento}
+              pendentes={dados.totais.pendentes}
+              percentual={dados.totais.progressoGeral}
+            />
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Etapas concluídas</CardTitle>
-              <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
-            </div>
+        <Card className="flex h-[120px] flex-col">
+          <CardHeader className="p-3 pb-0">
+            <CardTitle className="text-sm font-normal text-muted-foreground">Etapas concluídas</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-semibold">
-              {dados.totais.concluidas} <span className="text-lg font-normal text-muted-foreground">de {dados.totais.etapas}</span>
-            </p>
+          <CardContent className="flex flex-1 flex-col items-center justify-center p-2 pt-0">
+            <p className="text-3xl font-bold">{dados.totais.concluidas}</p>
+            <p className="text-xs text-muted-foreground">de {dados.totais.etapas}</p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Em andamento</CardTitle>
-              <Clock className="h-4 w-4 text-muted-foreground" />
-            </div>
+        <Card className="flex h-[120px] flex-col">
+          <CardHeader className="p-3 pb-0">
+            <CardTitle className="text-sm font-normal text-muted-foreground">Em andamento</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-semibold">{dados.totais.emAndamento}</p>
+          <CardContent className="flex flex-1 flex-col items-center justify-center p-2 pt-0">
+            <p className="text-3xl font-bold">{dados.totais.emAndamento}</p>
+            <p className="text-xs text-muted-foreground">etapas</p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Atrasadas</CardTitle>
-              <AlertTriangle
-                className={`h-4 w-4 ${dados.totais.atrasadas > 0 ? "text-red-600" : "text-muted-foreground"}`}
-              />
-            </div>
+        <Card className="flex h-[120px] flex-col">
+          <CardHeader className="p-3 pb-0">
+            <CardTitle className="text-sm font-normal text-muted-foreground">Atrasadas</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex flex-1 flex-col items-center justify-center p-2 pt-0">
             <p
-              className={`text-3xl font-semibold ${dados.totais.atrasadas > 0 ? "text-red-600" : "text-muted-foreground"}`}
+              className={`text-3xl font-bold ${dados.totais.atrasadas > 0 ? "text-red-600" : "text-muted-foreground"}`}
             >
               {dados.totais.atrasadas}
             </p>
+            <p className="text-xs text-muted-foreground">com prazo vencido</p>
           </CardContent>
         </Card>
       </section>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
+      <Card>
           <CardHeader>
             <CardTitle>Próxima etapa</CardTitle>
           </CardHeader>
@@ -160,9 +129,19 @@ export default async function DashboardPage() {
               <p className="text-muted-foreground">Todas as etapas concluídas 🎉</p>
             )}
           </CardContent>
+      </Card>
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>Progresso por fase</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <GraficoFases fases={dados.fases} />
+          </CardContent>
         </Card>
 
-        <Card>
+        <Card className="lg:col-span-1">
           <CardHeader>
             <CardTitle>Lembretes próximos (7 dias)</CardTitle>
           </CardHeader>
@@ -198,27 +177,8 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Progresso por fase</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-5">
-            {dados.fases.map((fase) => (
-              <li key={fase.id} className="space-y-2">
-                <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
-                  <span className="font-medium">{fase.nome}</span>
-                  <span className="text-muted-foreground">
-                    {fase.etapasConcluidas}/{fase.totalEtapas} etapas · {fase.progressoMedio}%
-                  </span>
-                </div>
-                <BarraProgresso percent={fase.progressoMedio} />
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
+      </>
+      )}
     </div>
   );
 }

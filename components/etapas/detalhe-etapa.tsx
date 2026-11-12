@@ -24,7 +24,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { gerarLinkGoogleAgenda } from "@/lib/calendar";
+import { AnexosEtapa } from "@/components/etapas/anexos-etapa";
 import type {
+  Anexo,
   Anotacao,
   Etapa,
   Fase,
@@ -42,6 +44,7 @@ type EtapaDetalhe = Omit<Etapa, "inicio" | "fim"> & {
     }
   >;
   lembretes: Array<Omit<Lembrete, "criadoEm"> & { criadoEm: string }>;
+  anexos: Array<Omit<Anexo, "criadoEm"> & { criadoEm: string }>;
 };
 
 type ApiResult = { ok: true; data: unknown };
@@ -368,6 +371,8 @@ export function DetalheEtapa({ etapa }: { etapa: EtapaDetalhe }) {
           </form>
         </CardContent>
       </Card>
+
+      <AnexosEtapa etapa={{ id: etapa.id, anexos: etapa.anexos }} />
 
       <Dialog
         open={anotacaoParaExcluir !== null}

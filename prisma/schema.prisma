@@ -59,6 +59,7 @@ model Etapa {
   specKit     String?
   anotacoes   Anotacao[]
   lembretes   Lembrete[]
+  anexos      Anexo[]
 
   @@index([faseId, ordem])
   @@map("etapas")
@@ -92,4 +93,20 @@ model Lembrete {
 
   @@index([etapaId, enviado])
   @@map("lembretes")
+}
+
+// ============================================================
+// Anexo — arquivo associado a uma etapa
+// ============================================================
+model Anexo {
+  id       String   @id @default(cuid())
+  etapaId  String
+  etapa    Etapa    @relation(fields: [etapaId], references: [id], onDelete: Cascade)
+  nome     String
+  url      String
+  tipo     String
+  tamanho  Int
+  criadoEm DateTime @default(now())
+
+  @@map("anexos")
 }

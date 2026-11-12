@@ -20,6 +20,10 @@ export default async function Page({ params }: { params: { id: string } }) {
       ...lembrete,
       criadoEm: lembrete.criadoEm.toISOString(),
     })),
+    anexos: etapa.anexos.map((anexo) => ({
+      ...anexo,
+      criadoEm: anexo.criadoEm.toISOString(),
+    })),
   };
 
   return (

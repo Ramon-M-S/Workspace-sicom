@@ -7,6 +7,7 @@ export async function buscarEtapaDetalhe(id: string) {
       fase: { select: { id: true, nome: true, ordem: true } },
       anotacoes: { orderBy: { criadoEm: "desc" } },
       lembretes: { orderBy: { diasAntes: "desc" } },
+      anexos: true,
     },
   });
 }

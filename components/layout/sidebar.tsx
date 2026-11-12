@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
+  Calendar,
   LayoutDashboard,
   Kanban,
   ListChecks,
@@ -19,6 +20,7 @@ const navigation = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/etapas", label: "Etapas", icon: ListChecks },
   { href: "/roadmap", label: "Roadmap", icon: Map },
+  { href: "/calendario", label: "Calendário", icon: Calendar },
   { href: "/kanban", label: "Kanban", icon: Kanban },
   { href: "/configuracoes", label: "Configurações", icon: Settings },
 ];

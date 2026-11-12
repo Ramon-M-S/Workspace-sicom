@@ -3,6 +3,15 @@ import { calcularProximos } from "@/lib/lembretes";
 import { prisma } from "@/lib/prisma";
 
 export async function buscarDadosDashboard(): Promise<{
+  etapas: Array<{
+    id: string;
+    titulo: string;
+    faseId: string;
+    inicio: string;
+    fim: string;
+    status: string;
+    progresso: number;
+  }>;
   fases: Array<{
     id: string;
     nome: string;
@@ -73,6 +82,20 @@ export async function buscarDadosDashboard(): Promise<{
     };
   });
 
+  const etapas = fasesComEtapas.flatMap((fase) =>
+    fase.etapas
+      .sort((a, b) => a.ordem - b.ordem)
+      .map((etapa) => ({
+        id: etapa.id,
+        titulo: etapa.titulo,
+        faseId: etapa.faseId,
+        inicio: etapa.inicio.toISOString(),
+        fim: etapa.fim.toISOString(),
+        status: etapa.status,
+        progresso: etapa.progresso,
+      })),
+  );
+
   const proxima = todasEtapas
     .filter((etapa) => etapa.status !== "concluida" && etapa.fim >= inicioHoje)
     .sort((a, b) => a.fim.getTime() - b.fim.getTime())[0];
@@ -102,6 +125,7 @@ export async function buscarDadosDashboard(): Promise<{
   }));
 
   return {
+    etapas,
     fases,
     proximaEtapa: proxima
       ? {

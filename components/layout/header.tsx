@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { NovaEtapaDialog } from "@/components/etapas/nova-etapa-dialog";
 import { BuscaGlobal } from "@/components/layout/busca-global";
 import { Notificacoes } from "@/components/layout/notificacoes";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import {
   Sheet,
   SheetContent,
@@ -45,6 +46,7 @@ export function Header({ title = "TCC SICOM" }: HeaderProps) {
         <kbd className="ml-auto text-xs">Ctrl K</kbd>
       </Button>
       <Notificacoes />
+      <ThemeToggle />
       <Badge variant="secondary">2026.2</Badge>
       <NovaEtapaDialog />
       <BuscaGlobal open={buscaAberta} onOpenChange={setBuscaAberta} />

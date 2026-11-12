@@ -32,7 +32,7 @@ export function GraficoProgresso({ concluidas, emAndamento, pendentes, percentua
         >
           {percentual}%
         </text>
-        <Tooltip />
+        <Tooltip contentStyle={{ backgroundColor: "var(--background)", borderColor: "var(--border)" }} />
       </PieChart>
     </ResponsiveContainer>
   );

@@ -7,6 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
   LayoutDashboard,
+  Kanban,
   ListChecks,
   Map,
   Settings,
@@ -18,6 +19,7 @@ const navigation = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/etapas", label: "Etapas", icon: ListChecks },
   { href: "/roadmap", label: "Roadmap", icon: Map },
+  { href: "/kanban", label: "Kanban", icon: Kanban },
   { href: "/configuracoes", label: "Configurações", icon: Settings },
 ];
 

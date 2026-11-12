@@ -24,6 +24,10 @@ export default async function Page({ params }: { params: { id: string } }) {
       ...anexo,
       criadoEm: anexo.criadoEm.toISOString(),
     })),
+    logs: etapa.logs.map((log) => ({
+      ...log,
+      criadoEm: log.criadoEm.toISOString(),
+    })),
   };
 
   return (

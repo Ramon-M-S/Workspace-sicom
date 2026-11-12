@@ -50,3 +50,9 @@
 - [x] 5.1 Testes unitários com Vitest
 - [x] 5.2 Smoke test com Playwright 
 - [x] 5.3 Build de produção validado
+
+## Melhorias e Polimento
+
+- [x] Busca Global (Ctrl+K)
+- [x] Notificações no Sistema (Sino no Header)
+- [x] Anexos nas Etapas (Upload de PDF/Imagens)

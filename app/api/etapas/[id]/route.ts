@@ -6,6 +6,7 @@ import {
   ok,
 } from "@/lib/http";
 import { prisma } from "@/lib/prisma";
+import { registrarLog } from "@/lib/log";
 import { atualizarEtapaSchema } from "@/lib/validations/etapa";
 
 type RouteContext = { params: { id: string } };
@@ -47,7 +48,7 @@ export async function PATCH(request: Request, { params }: RouteContext) {
 
     const existente = await prisma.etapa.findUnique({
       where: { id: params.id },
-      select: { id: true },
+      select: { id: true, status: true, progresso: true },
     });
     if (!existente) return notFound();
 
@@ -63,6 +64,20 @@ export async function PATCH(request: Request, { params }: RouteContext) {
       where: { id: params.id },
       data,
     });
+
+    if (data.status !== undefined && data.status !== existente.status) {
+      await registrarLog(params.id, "status", "status", existente.status, data.status);
+    }
+    if (data.progresso !== undefined && data.progresso !== existente.progresso) {
+      await registrarLog(
+        params.id,
+        "progresso",
+        "progresso",
+        String(existente.progresso),
+        String(data.progresso),
+      );
+    }
+
     return ok(etapa);
   } catch (err) {
     if (isRecordNotFound(err)) return notFound();

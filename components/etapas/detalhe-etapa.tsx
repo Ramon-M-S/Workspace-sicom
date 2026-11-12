@@ -25,11 +25,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { gerarLinkGoogleAgenda } from "@/lib/calendar";
 import { AnexosEtapa } from "@/components/etapas/anexos-etapa";
+import { HistoricoEtapa } from "@/components/etapas/historico-etapa";
 import type {
   Anexo,
   Anotacao,
   Etapa,
   Fase,
+  LogAlteracao,
   Lembrete,
 } from "@/lib/generated/prisma/client";
 
@@ -45,6 +47,7 @@ type EtapaDetalhe = Omit<Etapa, "inicio" | "fim"> & {
   >;
   lembretes: Array<Omit<Lembrete, "criadoEm"> & { criadoEm: string }>;
   anexos: Array<Omit<Anexo, "criadoEm"> & { criadoEm: string }>;
+  logs: Array<Omit<LogAlteracao, "criadoEm"> & { criadoEm: string }>;
 };
 
 type ApiResult = { ok: true; data: unknown };
@@ -371,6 +374,8 @@ export function DetalheEtapa({ etapa }: { etapa: EtapaDetalhe }) {
           </form>
         </CardContent>
       </Card>
+
+      <HistoricoEtapa etapa={etapa} />
 
       <AnexosEtapa etapa={{ id: etapa.id, anexos: etapa.anexos }} />
 

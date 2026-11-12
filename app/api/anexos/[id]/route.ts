@@ -2,6 +2,7 @@ import { unlink } from "node:fs/promises";
 import path from "node:path";
 import { handleError, noContent, notFound } from "@/lib/http";
 import { prisma } from "@/lib/prisma";
+import { registrarLog } from "@/lib/log";
 
 export const runtime = "nodejs";
 
@@ -32,6 +33,7 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
     }
 
     await prisma.anexo.delete({ where: { id: params.id } });
+    await registrarLog(anexo.etapaId, "anexo", null, null, `Anexo excluído: ${anexo.nome}`);
     return noContent();
   } catch (err) {
     if (isRecordNotFound(err)) return notFound("Anexo não encontrado");

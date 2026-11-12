@@ -1,5 +1,6 @@
 import { created, handleError, notFound, ok } from "@/lib/http";
 import { prisma } from "@/lib/prisma";
+import { registrarLog } from "@/lib/log";
 import { criarAnotacaoSchema } from "@/lib/validations/anotacao";
 
 type RouteContext = { params: { id: string } };
@@ -35,6 +36,7 @@ export async function POST(request: Request, { params }: RouteContext) {
     const anotacao = await prisma.anotacao.create({
       data: { ...data, etapaId: params.id },
     });
+    await registrarLog(params.id, "anotacao", null, null, "Anotação criada");
     return created(anotacao);
   } catch (err) {
     return handleError(err);

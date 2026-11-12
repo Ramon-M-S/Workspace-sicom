@@ -15,14 +15,14 @@ datasource db {
 }
 
 model Configuracao {
-  id               String   @id @default("singleton")
-  nomeProjeto      String   @default("TCC - SICOM")
-  dataInicio       DateTime @default(now())
+  id               String    @id @default("singleton")
+  nomeProjeto      String    @default("TCC - SICOM")
+  dataInicio       DateTime  @default(now())
   dataDefesa       DateTime?
   emailLembrete    String?
-  ativoLembretes   Boolean  @default(true)
-  diasAntecedencia Int      @default(7)
-  atualizadoEm     DateTime @updatedAt
+  ativoLembretes   Boolean   @default(true)
+  diasAntecedencia Int       @default(7)
+  atualizadoEm     DateTime  @updatedAt
 
   @@map("configuracoes")
 }
@@ -44,9 +44,9 @@ model Fase {
 // Etapa — unidade atômica do planejamento do TCC
 // ============================================================
 model Etapa {
-  id          String     @id @default(cuid())
+  id          String         @id @default(cuid())
   faseId      String
-  fase        Fase       @relation(fields: [faseId], references: [id], onDelete: Cascade)
+  fase        Fase           @relation(fields: [faseId], references: [id], onDelete: Cascade)
   ordem       Int
   titulo      String
   objetivo    String
@@ -54,12 +54,13 @@ model Etapa {
   dod         String[]
   inicio      DateTime
   fim         DateTime
-  status      String     @default("pendente")
-  progresso   Int        @default(0)
+  status      String         @default("pendente")
+  progresso   Int            @default(0)
   specKit     String?
   anotacoes   Anotacao[]
   lembretes   Lembrete[]
   anexos      Anexo[]
+  logs        LogAlteracao[]
 
   @@index([faseId, ordem])
   @@map("etapas")
@@ -109,4 +110,20 @@ model Anexo {
   criadoEm DateTime @default(now())
 
   @@map("anexos")
+}
+
+// ============================================================
+// LogAlteracao — histórico de alterações feitas em uma etapa
+// ============================================================
+model LogAlteracao {
+  id          String   @id @default(cuid())
+  etapaId     String
+  etapa       Etapa    @relation(fields: [etapaId], references: [id], onDelete: Cascade)
+  tipo        String
+  campo       String?
+  valorAntigo String?
+  valorNovo   String?
+  criadoEm    DateTime @default(now())
+
+  @@map("log_alteracoes")
 }

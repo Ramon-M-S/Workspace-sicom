@@ -3,6 +3,7 @@ import { mkdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { badRequest, created, handleError, notFound, ok } from "@/lib/http";
 import { prisma } from "@/lib/prisma";
+import { registrarLog } from "@/lib/log";
 
 export const runtime = "nodejs";
 
@@ -56,9 +57,10 @@ export async function POST(request: Request, { params }: RouteContext) {
     const caminho = path.join(UPLOADS_DIR, nomeUnico);
     await mkdir(UPLOADS_DIR, { recursive: true });
 
+    let anexo;
     try {
       await writeFile(caminho, Buffer.from(await file.arrayBuffer()), { flag: "wx" });
-      const anexo = await prisma.anexo.create({
+      anexo = await prisma.anexo.create({
         data: {
           etapaId: params.id,
           nome: file.name,
@@ -67,11 +69,13 @@ export async function POST(request: Request, { params }: RouteContext) {
           tamanho: file.size,
         },
       });
-      return created(anexo);
     } catch (err) {
       await unlink(caminho).catch(() => undefined);
       throw err;
     }
+
+    await registrarLog(params.id, "anexo", null, null, `Anexo enviado: ${file.name}`);
+    return created(anexo);
   } catch (err) {
     return handleError(err);
   }

@@ -8,6 +8,7 @@ export async function buscarEtapaDetalhe(id: string) {
       anotacoes: { orderBy: { criadoEm: "desc" } },
       lembretes: { orderBy: { diasAntes: "desc" } },
       anexos: true,
+      logs: { orderBy: { criadoEm: "desc" } },
     },
   });
 }

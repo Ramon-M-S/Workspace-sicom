@@ -11,7 +11,8 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "db:seed": "tsx prisma/seed-runner.ts"
+    "db:seed": "tsx prisma/seed-runner.ts",
+    "setup": "bash scripts/setup.sh"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

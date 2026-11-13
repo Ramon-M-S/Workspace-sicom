@@ -37,7 +37,7 @@ export async function POST(request: Request) {
       select: { id: true, nome: true, email: true, criadoEm: true },
     });
     usuarioCriadoId = usuario.id;
-    await executarSeed(usuario.id);
+    await executarSeed(usuario.id, true);
     return NextResponse.json({ usuario }, { status: 201 });
   } catch (error) {
     if (usuarioCriadoId) {

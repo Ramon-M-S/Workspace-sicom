@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { listarEtapasComFiltros, listarFases } from "@/lib/queries/etapas";
+import { NovaEtapaDialog } from "@/components/etapas/nova-etapa-dialog";
+import { NovaFaseDialog } from "@/components/etapas/nova-fase-dialog";
 
 type PageProps = {
   searchParams: { fase?: string; status?: string; q?: string };
@@ -32,6 +34,10 @@ export default async function Page({ searchParams }: PageProps) {
           <p className="text-sm text-muted-foreground">
             {etapas.length} {etapas.length === 1 ? "etapa" : "etapas"} no total
           </p>
+        </div>
+        <div className="flex gap-2">
+          <NovaFaseDialog />
+          <NovaEtapaDialog fases={fases} />
         </div>
       </div>
 

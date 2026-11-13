@@ -37,7 +37,7 @@ const etapas = [
   { id: "m05-defesa", faseId: "fase-monografia", ordem: 5, titulo: "M05 Defesa", objetivo: "Apresentar e defender os resultados do TCC SICOM perante a banca.", entregaveis: ["Apresentação do trabalho", "Registro das considerações da banca"], dod: ["Defesa realizada", "Recomendações da banca registradas"], inicio: "2027-03-15", fim: "2027-03-15", specKit: null },
 ] as const;
 
-export async function executarSeed(usuarioId: string) {
+export async function executarSeed(usuarioId: string, apenasFases = false) {
   await prisma.configuracao.upsert({
     where: { usuarioId },
     create: {
@@ -56,6 +56,11 @@ export async function executarSeed(usuarioId: string) {
       create: { ...fase, id, usuarioId },
       update: { ordem: fase.ordem, nome: fase.nome },
     });
+  }
+
+  if (apenasFases) {
+    console.log(`Seed concluído: ${fases.length} fases criadas/atualizadas.`);
+    return;
   }
 
   for (const etapa of etapas) {

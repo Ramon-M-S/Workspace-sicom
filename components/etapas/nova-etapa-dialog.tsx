@@ -32,7 +32,7 @@ function itensPorLinha(valor: FormDataEntryValue | null) {
     .filter(Boolean);
 }
 
-export function NovaEtapaDialog() {
+export function NovaEtapaDialog({ fases }: { fases: Array<{ id: string; nome: string }> }) {
   const router = useRouter();
   const [aberto, setAberto] = useState(false);
   const [salvando, setSalvando] = useState(false);
@@ -115,7 +115,7 @@ export function NovaEtapaDialog() {
               Fase
               <select
                 name="faseId"
-                defaultValue={fases[0].id}
+                defaultValue={fases[0]?.id ?? ""}
                 required
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
               >

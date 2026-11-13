@@ -42,7 +42,7 @@ export default async function DashboardPage() {
         <Card>
           <CardContent className="py-12 text-center">
             <p className="text-muted-foreground">
-              Nenhuma etapa cadastrada. Rode o seed do banco.
+              Nenhuma etapa cadastrada.
             </p>
           </CardContent>
         </Card>

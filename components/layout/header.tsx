@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Menu, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { NovaEtapaDialog } from "@/components/etapas/nova-etapa-dialog";
 import { BuscaGlobal } from "@/components/layout/busca-global";
 import { Notificacoes } from "@/components/layout/notificacoes";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
@@ -49,7 +48,6 @@ export function Header({ title = "TCC SICOM" }: HeaderProps) {
       <Notificacoes />
       <ThemeToggle />
       <Badge variant="secondary">2026.2</Badge>
-      <NovaEtapaDialog />
       <UserMenu />
       <BuscaGlobal open={buscaAberta} onOpenChange={setBuscaAberta} />
     </header>

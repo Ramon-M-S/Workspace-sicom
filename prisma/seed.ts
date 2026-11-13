@@ -15,7 +15,7 @@ async function main() {
     },
   });
 
-  await executarSeed(usuario.id);
+  await executarSeed(usuario.id, false);
 }
 
 main()

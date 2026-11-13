@@ -176,6 +176,6 @@ O desenvolvimento seguiu o **Spec-Driven Development (SDD)**, utilizando IA (Gem
 
 ## 👨‍💻 Autor
 
-**Gabriel** — Sistemas de Informação, IFMA  
+**Ramon M. Siilva* — Sistemas de Informação, IFMA  
 **Orientador:** Prof. Dr. Hélder Pereira Borges  
 **Ano:** 2026.2

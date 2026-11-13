@@ -1,12 +1,16 @@
 import { addDays, differenceInCalendarDays, startOfDay } from "date-fns";
 import { prisma } from "@/lib/prisma";
+import { getUsuarioLogado } from "@/lib/auth-utils";
 
 export async function buscarDadosRoadmap() {
+  const usuarioId = await getUsuarioLogado();
   const [fases, etapas] = await Promise.all([
     prisma.fase.findMany({
+      where: { usuarioId },
       orderBy: { ordem: "asc" },
       include: {
         etapas: {
+          where: { usuarioId },
           select: {
             id: true,
             titulo: true,
@@ -19,6 +23,7 @@ export async function buscarDadosRoadmap() {
       },
     }),
     prisma.etapa.findMany({
+      where: { usuarioId },
       select: {
         id: true,
         titulo: true,

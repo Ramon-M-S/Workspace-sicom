@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
+import { UsuarioNaoAutenticadoError } from "@/lib/auth-utils";
 
 export function ok<T>(data: T, status = 200) {
   return NextResponse.json(data, { status });
@@ -26,6 +27,9 @@ export function serverError(message = "Erro interno") {
 }
 
 export function handleError(err: unknown) {
+  if (err instanceof UsuarioNaoAutenticadoError) {
+    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+  }
   if (err instanceof ZodError) {
     return NextResponse.json(
       { error: "Dados inválidos", details: err.flatten() },

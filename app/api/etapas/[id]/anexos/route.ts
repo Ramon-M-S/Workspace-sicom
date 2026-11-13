@@ -4,6 +4,7 @@ import path from "node:path";
 import { badRequest, created, handleError, notFound, ok } from "@/lib/http";
 import { prisma } from "@/lib/prisma";
 import { registrarLog } from "@/lib/log";
+import { getUsuarioLogado } from "@/lib/auth-utils";
 
 export const runtime = "nodejs";
 
@@ -15,14 +16,16 @@ const UPLOADS_DIR = path.join(process.cwd(), "public", "uploads");
 
 export async function GET(_request: Request, { params }: RouteContext) {
   try {
-    const etapa = await prisma.etapa.findUnique({
-      where: { id: params.id },
+    const usuarioId = await getUsuarioLogado();
+    if (!usuarioId) return new Response("Não autorizado.", { status: 401 });
+    const etapa = await prisma.etapa.findFirst({
+      where: { id: params.id, usuarioId },
       select: { id: true },
     });
     if (!etapa) return notFound("Etapa não encontrada");
 
     const anexos = await prisma.anexo.findMany({
-      where: { etapaId: params.id },
+      where: { etapaId: params.id, usuarioId },
       orderBy: { criadoEm: "desc" },
     });
     return ok(anexos);
@@ -33,8 +36,10 @@ export async function GET(_request: Request, { params }: RouteContext) {
 
 export async function POST(request: Request, { params }: RouteContext) {
   try {
-    const etapa = await prisma.etapa.findUnique({
-      where: { id: params.id },
+    const usuarioId = await getUsuarioLogado();
+    if (!usuarioId) return new Response("Não autorizado.", { status: 401 });
+    const etapa = await prisma.etapa.findFirst({
+      where: { id: params.id, usuarioId },
       select: { id: true },
     });
     if (!etapa) return notFound("Etapa não encontrada");
@@ -63,6 +68,7 @@ export async function POST(request: Request, { params }: RouteContext) {
       anexo = await prisma.anexo.create({
         data: {
           etapaId: params.id,
+          usuarioId,
           nome: file.name,
           url: `/uploads/${nomeUnico}`,
           tipo: file.type,

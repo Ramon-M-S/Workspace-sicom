@@ -1,14 +1,18 @@
 import { addDays, endOfDay, startOfDay } from "date-fns";
 import { prisma } from "@/lib/prisma";
 import { handleError, ok } from "@/lib/http";
+import { getUsuarioLogado } from "@/lib/auth-utils";
 
 export async function GET() {
   try {
+    const usuarioId = await getUsuarioLogado();
+    if (!usuarioId) return new Response("Não autorizado.", { status: 401 });
     const hoje = startOfDay(new Date());
     const fimJanela = endOfDay(addDays(hoje, 7));
 
     const etapas = await prisma.etapa.findMany({
       where: {
+        usuarioId,
         status: { not: "concluida" },
         fim: { lte: fimJanela },
       },

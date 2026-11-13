@@ -1,7 +1,10 @@
 import { prisma } from "@/lib/prisma";
+import { getUsuarioLogado } from "@/lib/auth-utils";
 
 export async function buscarEtapasCalendario() {
+  const usuarioId = await getUsuarioLogado();
   return prisma.etapa.findMany({
+    where: { usuarioId },
     select: {
       id: true,
       titulo: true,

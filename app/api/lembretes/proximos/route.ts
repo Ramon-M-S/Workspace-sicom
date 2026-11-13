@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { calcularProximos } from "@/lib/lembretes";
 import { handleError, ok } from "@/lib/http";
 import { prisma } from "@/lib/prisma";
+import { getUsuarioLogado } from "@/lib/auth-utils";
 
 export async function GET(request: NextRequest) {
   const rawJanela = request.nextUrl.searchParams.get("janela");
@@ -13,8 +14,10 @@ export async function GET(request: NextRequest) {
   const limiteAtrasadas = new Date(hoje.getTime() - 30 * 24 * 60 * 60 * 1000);
 
   try {
+    const usuarioId = await getUsuarioLogado();
+    if (!usuarioId) return new Response("Não autorizado.", { status: 401 });
     const etapas = await prisma.etapa.findMany({
-      where: { fim: { gte: limiteAtrasadas } },
+      where: { usuarioId, fim: { gte: limiteAtrasadas } },
       select: {
         id: true,
         titulo: true,

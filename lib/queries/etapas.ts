@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getUsuarioLogado } from "@/lib/auth-utils";
 
 export type FiltrosEtapas = {
   faseId?: string;
@@ -7,8 +8,10 @@ export type FiltrosEtapas = {
 };
 
 export async function listarEtapasComFiltros(filtros: FiltrosEtapas) {
+  const usuarioId = await getUsuarioLogado();
   return prisma.etapa.findMany({
     where: {
+      usuarioId,
       faseId: filtros.faseId || undefined,
       status: filtros.status || undefined,
       titulo: filtros.busca
@@ -24,7 +27,9 @@ export async function listarEtapasComFiltros(filtros: FiltrosEtapas) {
 }
 
 export async function listarFases() {
+  const usuarioId = await getUsuarioLogado();
   return prisma.fase.findMany({
+    where: { usuarioId },
     orderBy: { ordem: "asc" },
     select: { id: true, nome: true, ordem: true },
   });

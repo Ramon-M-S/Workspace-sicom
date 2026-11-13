@@ -3,6 +3,7 @@ import path from "node:path";
 import { handleError, noContent, notFound } from "@/lib/http";
 import { prisma } from "@/lib/prisma";
 import { registrarLog } from "@/lib/log";
+import { getUsuarioLogado } from "@/lib/auth-utils";
 
 export const runtime = "nodejs";
 
@@ -19,7 +20,9 @@ function isRecordNotFound(err: unknown) {
 
 export async function DELETE(_request: Request, { params }: RouteContext) {
   try {
-    const anexo = await prisma.anexo.findUnique({ where: { id: params.id } });
+    const usuarioId = await getUsuarioLogado();
+    if (!usuarioId) return new Response("Não autorizado.", { status: 401 });
+    const anexo = await prisma.anexo.findFirst({ where: { id: params.id, usuarioId } });
     if (!anexo) return notFound("Anexo não encontrado");
 
     const nomeArquivo = path.basename(anexo.url);
@@ -32,7 +35,7 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
       }
     }
 
-    await prisma.anexo.delete({ where: { id: params.id } });
+    await prisma.anexo.delete({ where: { id: params.id, usuarioId } });
     await registrarLog(anexo.etapaId, "anexo", null, null, `Anexo excluído: ${anexo.nome}`);
     return noContent();
   } catch (err) {

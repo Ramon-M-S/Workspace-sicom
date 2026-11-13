@@ -1,13 +1,16 @@
 import { handleError, notFound } from "@/lib/http";
 import { gerarIcs } from "@/lib/calendar";
 import { prisma } from "@/lib/prisma";
+import { getUsuarioLogado } from "@/lib/auth-utils";
 
 type RouteContext = { params: { id: string } };
 
 export async function GET(_request: Request, { params }: RouteContext) {
   try {
-    const etapa = await prisma.etapa.findUnique({
-      where: { id: params.id },
+    const usuarioId = await getUsuarioLogado();
+    if (!usuarioId) return new Response("Não autorizado.", { status: 401 });
+    const etapa = await prisma.etapa.findFirst({
+      where: { id: params.id, usuarioId },
       select: {
         id: true,
         titulo: true,

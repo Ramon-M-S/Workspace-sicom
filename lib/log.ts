@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getUsuarioLogado } from "@/lib/auth-utils";
 
 export function registrarLog(
   etapaId: string,
@@ -7,7 +8,12 @@ export function registrarLog(
   valorAntigo: string | null,
   valorNovo: string | null,
 ) {
-  return prisma.logAlteracao.create({
-    data: { etapaId, tipo, campo, valorAntigo, valorNovo },
-  });
+  return getUsuarioLogado().then((usuarioId) =>
+    prisma.etapa.findFirstOrThrow({
+      where: { id: etapaId, usuarioId },
+      select: { usuarioId: true },
+    }).then(() => prisma.logAlteracao.create({
+      data: { etapaId, usuarioId, tipo, campo, valorAntigo, valorNovo },
+    })),
+  );
 }

@@ -1,6 +1,7 @@
 import { addDays, differenceInCalendarDays, startOfDay } from "date-fns";
 import { calcularProximos } from "@/lib/lembretes";
 import { prisma } from "@/lib/prisma";
+import { getUsuarioLogado } from "@/lib/auth-utils";
 
 export async function buscarDadosDashboard(): Promise<{
   etapas: Array<{
@@ -46,12 +47,14 @@ export async function buscarDadosDashboard(): Promise<{
   }>;
 }> {
   const agora = new Date();
+  const usuarioId = await getUsuarioLogado();
   const inicioHoje = startOfDay(agora);
   const fimJanelaLembretes = addDays(agora, 7);
 
   const fasesComEtapas = await prisma.fase.findMany({
+    where: { usuarioId },
     orderBy: { ordem: "asc" },
-    include: { etapas: true },
+    include: { etapas: { where: { usuarioId } } },
   });
 
   const todasEtapas = fasesComEtapas.flatMap((fase) =>
@@ -102,6 +105,7 @@ export async function buscarDadosDashboard(): Promise<{
 
   const etapasComLembretes = await prisma.etapa.findMany({
     where: {
+      usuarioId,
       fim: { lte: fimJanelaLembretes },
       status: { not: "concluida" },
     },

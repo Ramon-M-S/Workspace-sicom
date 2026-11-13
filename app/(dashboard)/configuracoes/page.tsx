@@ -1,18 +1,20 @@
 import type { Metadata } from "next";
 import { FormConfiguracoes } from "@/components/configuracoes/form-configuracoes";
 import { prisma } from "@/lib/prisma";
+import { getUsuarioLogado } from "@/lib/auth-utils";
 
 export const metadata: Metadata = { title: "Configurações | SICOM" };
 
 export default async function ConfiguracoesPage() {
+  const usuarioId = await getUsuarioLogado();
   const [configuracao, etapas, anotacoes] = await Promise.all([
     prisma.configuracao.upsert({
-      where: { id: "singleton" },
-      create: { id: "singleton" },
+      where: { usuarioId },
+      create: { usuarioId },
       update: {},
     }),
-    prisma.etapa.count(),
-    prisma.anotacao.count(),
+    prisma.etapa.count({ where: { usuarioId } }),
+    prisma.anotacao.count({ where: { usuarioId } }),
   ]);
 
   return (

@@ -51,6 +51,7 @@ _prisma_backup/
 test-results/
 playwright-report/
 playwright/.cache/
+playwright/.auth/
 
 # Uploads (arquivos físicos não vão para o git)
 public/uploads/*

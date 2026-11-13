@@ -8,6 +8,7 @@ import { NovaEtapaDialog } from "@/components/etapas/nova-etapa-dialog";
 import { BuscaGlobal } from "@/components/layout/busca-global";
 import { Notificacoes } from "@/components/layout/notificacoes";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { UserMenu } from "@/components/layout/user-menu";
 import {
   Sheet,
   SheetContent,
@@ -23,7 +24,7 @@ export function Header({ title = "TCC SICOM" }: HeaderProps) {
   const [buscaAberta, setBuscaAberta] = useState(false);
 
   return (
-    <header className="relative z-50 flex h-14 items-center gap-4 overflow-visible border-b bg-background px-6">
+    <header className="sticky top-0 z-50 flex h-14 items-center gap-4 overflow-visible border-b bg-background px-6">
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon" className="md:hidden" aria-label="Abrir menu">
@@ -49,6 +50,7 @@ export function Header({ title = "TCC SICOM" }: HeaderProps) {
       <ThemeToggle />
       <Badge variant="secondary">2026.2</Badge>
       <NovaEtapaDialog />
+      <UserMenu />
       <BuscaGlobal open={buscaAberta} onOpenChange={setBuscaAberta} />
     </header>
   );

@@ -105,6 +105,7 @@ export function DetalheEtapa({ etapa }: { etapa: EtapaDetalhe }) {
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [textoEdicao, setTextoEdicao] = useState("");
   const [anotacaoParaExcluir, setAnotacaoParaExcluir] = useState<string | null>(null);
+  const [confirmarExclusaoEtapa, setConfirmarExclusaoEtapa] = useState(false);
   const [salvando, setSalvando] = useState(false);
 
   async function atualizarEtapa(dados: { status?: string; progresso?: number }) {
@@ -170,6 +171,19 @@ export function DetalheEtapa({ etapa }: { etapa: EtapaDetalhe }) {
     }
   }
 
+  async function excluirEtapa() {
+    setSalvando(true);
+    try {
+      await chamarApi(`/api/etapas/${etapa.id}`, "DELETE");
+      toast.success("Etapa excluída.");
+      router.push("/etapas");
+    } catch {
+      toast.error("Erro ao excluir etapa.");
+    } finally {
+      setSalvando(false);
+    }
+  }
+
   const linkAgenda = gerarLinkGoogleAgenda({
     id: etapa.id,
     titulo: etapa.titulo,
@@ -181,17 +195,59 @@ export function DetalheEtapa({ etapa }: { etapa: EtapaDetalhe }) {
 
   return (
     <div className="space-y-6">
-      <header className="space-y-2">
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-semibold">{etapa.titulo}</h1>
-          <Badge variant={varianteStatus(etapa.status)} className={classesStatus(etapa.status)}>
-            {labelStatus(etapa.status)}
-          </Badge>
+      <header className="flex flex-wrap items-start justify-between gap-4">
+        <div className="space-y-2">
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="text-2xl font-semibold">{etapa.titulo}</h1>
+            <Badge variant={varianteStatus(etapa.status)} className={classesStatus(etapa.status)}>
+              {labelStatus(etapa.status)}
+            </Badge>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            {etapa.fase.nome} · {format(new Date(etapa.inicio), "dd/MM/yyyy")} – {format(new Date(etapa.fim), "dd/MM/yyyy")}
+          </p>
         </div>
-        <p className="text-sm text-muted-foreground">
-          {etapa.fase.nome} · {format(new Date(etapa.inicio), "dd/MM/yyyy")} – {format(new Date(etapa.fim), "dd/MM/yyyy")}
-        </p>
+        <Button
+          type="button"
+          variant="destructive"
+          onClick={() => setConfirmarExclusaoEtapa(true)}
+        >
+          <Trash2 className="h-4 w-4" />
+          Excluir etapa
+        </Button>
       </header>
+
+      <Dialog
+        open={confirmarExclusaoEtapa}
+        onOpenChange={setConfirmarExclusaoEtapa}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Excluir etapa?</DialogTitle>
+            <DialogDescription>
+              Esta ação não pode ser desfeita. Todas as anotações e anexos desta etapa também serão excluídos.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={salvando}
+              onClick={() => setConfirmarExclusaoEtapa(false)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              disabled={salvando}
+              onClick={excluirEtapa}
+            >
+              Excluir
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Card>
         <CardHeader><CardTitle>Objetivo</CardTitle></CardHeader>

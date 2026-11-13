@@ -14,8 +14,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Usuario {
+  id            String         @id @default(cuid())
+  nome          String
+  email         String         @unique
+  senhaHash     String
+  criadoEm      DateTime       @default(now())
+  fases         Fase[]
+  etapas        Etapa[]
+  anotacoes     Anotacao[]
+  anexos        Anexo[]
+  logs          LogAlteracao[]
+  configuracoes Configuracao[]
+
+  @@map("usuarios")
+}
+
 model Configuracao {
-  id               String    @id @default("singleton")
+  id               String    @id @default(cuid())
+  usuarioId        String
+  usuario          Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   nomeProjeto      String    @default("TCC - SICOM")
   dataInicio       DateTime  @default(now())
   dataDefesa       DateTime?
@@ -23,6 +41,8 @@ model Configuracao {
   ativoLembretes   Boolean   @default(true)
   diasAntecedencia Int       @default(7)
   atualizadoEm     DateTime  @updatedAt
+
+  @@unique([usuarioId])
 
   @@map("configuracoes")
 }
@@ -32,6 +52,8 @@ model Configuracao {
 // ============================================================
 model Fase {
   id        String  @id @default(cuid())
+  usuarioId String
+  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   ordem     Int
   nome      String
   descricao String?
@@ -45,6 +67,8 @@ model Fase {
 // ============================================================
 model Etapa {
   id          String         @id @default(cuid())
+  usuarioId   String
+  usuario     Usuario        @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   faseId      String
   fase        Fase           @relation(fields: [faseId], references: [id], onDelete: Cascade)
   ordem       Int
@@ -71,6 +95,8 @@ model Etapa {
 // ============================================================
 model Anotacao {
   id           String   @id @default(cuid())
+  usuarioId    String
+  usuario      Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   etapaId      String
   etapa        Etapa    @relation(fields: [etapaId], references: [id], onDelete: Cascade)
   conteudo     String
@@ -101,6 +127,8 @@ model Lembrete {
 // ============================================================
 model Anexo {
   id       String   @id @default(cuid())
+  usuarioId String
+  usuario  Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   etapaId  String
   etapa    Etapa    @relation(fields: [etapaId], references: [id], onDelete: Cascade)
   nome     String
@@ -117,6 +145,8 @@ model Anexo {
 // ============================================================
 model LogAlteracao {
   id          String   @id @default(cuid())
+  usuarioId   String
+  usuario     Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   etapaId     String
   etapa       Etapa    @relation(fields: [etapaId], references: [id], onDelete: Cascade)
   tipo        String

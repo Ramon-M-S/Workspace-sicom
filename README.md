@@ -1,7 +1,7 @@
 # SICOM — Sistema de Gestão de TCC
 
-> **Trabalho de Conclusão de Curso (TCC)** — Sistemas de Informação, IFMA
-> **Tema:** Plataforma de comunicação operacional para a Guarda Municipal de São Luís
+> **Trabalho de Conclusão de Curso (TCC)** — Sistemas de Informação, IFMA  
+> **Tema:** Plataforma de comunicação operacional para a Guarda Municipal de São Luís  
 > **Status:** MVP Concluído e Funcional
 
 ---
@@ -31,23 +31,9 @@ A metodologia de desenvolvimento seguiu o **Spec-Driven Development (SDD)**, uti
 
 ---
 
-## 🛠️ Stack Tecnológica
+## 🚀 Inicialização Rápida (Setup Automatizado)
 
-| Camada | Tecnologia |
-|---|---|
-| **Frontend** | Next.js 14 (App Router), TypeScript, Tailwind CSS |
-| **UI** | shadcn/ui, lucide-react, Recharts |
-| **Backend** | Next.js API Routes (App Router) |
-| **Banco de Dados** | PostgreSQL 16 (Docker) + Prisma ORM |
-| **Validação** | Zod |
-| **Datas** | date-fns |
-| **E-mail** | Nodemailer |
-| **Testes** | Vitest (unitários) + Playwright (E2E) |
-| **Versionamento** | Git + Conventional Commits |
-
----
-
-## 🚀 Como Rodar Localmente
+A forma mais rápida de rodar o projeto é usando o script de setup. Ele sobe o Docker, instala dependências, roda migrations e popula o banco.
 
 ### Pré-requisitos
 - Node.js 20+
@@ -61,31 +47,33 @@ A metodologia de desenvolvimento seguiu o **Spec-Driven Development (SDD)**, uti
 git clone https://github.com/seu-usuario/sicom-tcc.git
 cd sicom-tcc
 
-# 2. Suba o banco de dados
-docker compose up -d
-docker compose ps  # aguarde o status "healthy"
+# 2. Rode o script de setup
+npm run setup
+# (ou: ./scripts/setup.sh)
 
-# 3. Instale as dependências
-npm install
+# 3. Edite o arquivo .env com suas credenciais (se ainda não existir)
+# (O script cria o .env a partir do .env.example se não existir)
 
-# 4. Configure as variáveis de ambiente
-cp .env.example .env
-# Edite o .env com suas credenciais (veja seção abaixo)
-
-# 5. Rode as migrations e o seed
-npx prisma migrate dev
-npx prisma db seed
-
-# 6. Suba o servidor de desenvolvimento
+# 4. Inicie o servidor
 npm run dev
-
-Acesse: http://localhost:3000 
-
 ```
+
+Acesse: http://localhost:3000
+
+### O que o script de setup faz?
+1. Verifica se o Docker está rodando.
+2. Sobe o container PostgreSQL (`docker compose up -d`).
+3. Instala as dependências (`npm install`).
+4. Cria o `.env` a partir do `.env.example` (se necessário).
+5. Roda `prisma generate`, `prisma migrate deploy` e `prisma db seed`.
+
+---
+
 ## 🔐 Variáveis de Ambiente
 
-Crie o arquivo .env na raiz com as seguintes variáveis:
+Crie o arquivo `.env` na raiz com as seguintes variáveis:
 
+```env
 # Banco de Dados
 DATABASE_URL="postgresql://sicom:sicom@localhost:5432/sicom_dev?schema=public"
 
@@ -99,77 +87,82 @@ LEMBRETE_EMAIL_DESTINO="seu-email@gmail.com"
 
 # Segurança do Cron
 CRON_SECRET="uma-senha-forte-aleatoria"
+```
 
-## Configurar o Ethereal (para testes)
+### Configurar o Ethereal (para testes)
+1. Acesse https://ethereal.email/
+2. Clique em **Create Ethereal Account**
+3. Copie as credenciais e cole no `.env`
 
-1.Acesse https://ethereal.email/
+---
 
-2.Clique em Create Ethereal Account
+## 📁 Estrutura do Projeto
 
-3.Copie as credenciais e cole no .env
+```text
+sicom-tcc/
+├── app/                      # App Router do Next.js
+│   ├── (dashboard)/          # Rotas protegidas (layout com sidebar)
+│   │   ├── dashboard/        # Visão geral e gráficos
+│   │   ├── etapas/           # Lista e detalhe de etapas
+│   │   ├── kanban/           # Visão Kanban
+│   │   ├── calendario/       # Visão mensal de prazos
+│   │   ├── roadmap/          # Gantt interativo
+│   │   └── configuracoes/    # Configurações do sistema
+│   ├── api/                  # API Routes
+│   └── layout.tsx            # Root layout
+├── components/
+│   ├── layout/               # Sidebar, Header, Busca Global, Notificações
+│   ├── etapas/               # Componentes de etapa
+│   ├── dashboard/            # Gráficos e Botão PDF
+│   ├── kanban/               # Board Kanban
+│   ├── calendario/           # Calendário mensal
+│   ├── roadmap/              # Componentes do roadmap
+│   └── ui/                   # shadcn/ui
+├── lib/
+│   ├── prisma.ts             # Singleton do Prisma Client
+│   ├── validations/          # Schemas Zod
+│   ├── queries/              # Funções server-side
+│   ├── lembretes.ts          # Cálculo de lembretes
+│   ├── calendar.ts           # Geração de .ics e Google Agenda
+│   ├── email.ts              # Envio de e-mails
+│   ├── log.ts                # Registro de histórico
+│   └── gerar-pdf.ts          # Geração de relatório PDF
+├── prisma/
+│   ├── schema.prisma         # Schema do banco
+│   └── seed.ts               # Seed inicial
+└── scripts/                  # Scripts utilitários
+```
 
-##  📁 Estrutura do Projeto
+---
 
-sicom-tcc/  
-├── app/                      # App Router do Next.js  
-│   ├── (dashboard)/          # Rotas protegidas (layout com sidebar)  
-│   │   ├── dashboard/        # Visão geral e gráficos  
-│   │   ├── etapas/           # Lista e detalhe de etapas  
-│   │   ├── kanban/           # Visão Kanban  
-│   │   ├── calendario/       # Visão mensal de prazos  
-│   │   ├── roadmap/          # Gantt interativo  
-│   │   └── configuracoes/    # Configurações do sistema  
-│   ├── api/                  # API Routes  
-│   └── layout.tsx            # Root layout  
-├── components/  
-│   ├── layout/               # Sidebar, Header, Busca Global, Notificações  
-│   ├── etapas/               # Componentes de etapa  
-│   ├── dashboard/            # Gráficos e Botão PDF  
-│   ├── kanban/               # Board Kanban  
-│   ├── calendario/           # Calendário mensal  
-│   ├── roadmap/              # Componentes do roadmap  
-│   └── ui/                   # shadcn/ui  
-├── lib/  
-│   ├── prisma.ts             # Singleton do Prisma Client  
-│   ├── validations/          # Schemas Zod  
-│   ├── queries/              # Funções server-side  
-│   ├── lembretes.ts          # Cálculo de lembretes  
-│   ├── calendar.ts           # Geração de .ics e Google Agenda 
-│   ├── email.ts              # Envio de e-mails   
-│   ├── log.ts                # Registro de histórico  
-│   └── gerar-pdf.ts          # Geração de relatório PDF 
-├── prisma/  
-│   ├── schema.prisma         # Schema do banco  
-│   └── seed.ts               # Seed inicial  
-└── scripts/                  # Scripts utilitários  
- 
- ## 🧪 Testes
+## 🧪 Testes
 
- ##  Rodar todos os testes unitários
+```bash
+# Rodar todos os testes unitários
 npm test
 
- ##  Rodar testes em watch mode
+# Rodar testes em watch mode
 npm run test:watch
 
- ##  Rodar testes E2E (Playwright)
+# Rodar testes E2E (Playwright)
 npm run test:e2e
 
-## Rodar testes E2E com interface visual
+# Rodar testes E2E com interface visual
 npm run test:e2e:ui
+```
+
+---
 
 ## 🌐 Deploy
 
 ### Vercel (recomendado)
-
 1. Importe o repositório no Vercel.
 2. Configure as variáveis de ambiente (veja seção anterior).
 3. Configure o cron em `vercel.json` (já incluído no projeto).
 4. Deploy.
 
 ### Banco de Dados
-
 O projeto usa PostgreSQL. Para produção, recomendamos:
-
 - **Neon** (free tier): https://neon.tech
 - **Supabase** (free tier): https://supabase.com
 
@@ -183,7 +176,6 @@ O desenvolvimento seguiu o **Spec-Driven Development (SDD)**, utilizando IA (Gem
 
 ## 👨‍💻 Autor
 
-**Ramon Moreira da Silva** — Sistemas de Informação, IFMA
-
-**Orientador:** Prof. Dr. Hélder Pereira Borges
+**Gabriel** — Sistemas de Informação, IFMA  
+**Orientador:** Prof. Dr. Hélder Pereira Borges  
 **Ano:** 2026.2

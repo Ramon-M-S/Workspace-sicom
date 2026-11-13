@@ -43,9 +43,14 @@ export function NovaEtapaDialog() {
     const valores = new FormData(form);
     const inicio = String(valores.get("inicio") ?? "");
     const fim = String(valores.get("fim") ?? "");
+    const faseId = String(valores.get("faseId") ?? "");
+    if (!faseId) {
+      toast.error("Selecione uma fase.");
+      return;
+    }
     const payload = {
       titulo: String(valores.get("titulo") ?? ""),
-      faseId: String(valores.get("faseId") ?? ""),
+      faseId,
       ordem: Number(valores.get("ordem")),
       objetivo: String(valores.get("objetivo") ?? ""),
       inicio: new Date(`${inicio}T00:00:00.000Z`).toISOString(),

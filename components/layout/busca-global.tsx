@@ -87,7 +87,7 @@ export function BuscaGlobal({ open, onOpenChange }: BuscaGlobalProps) {
                 key={etapa.id}
                 value={`etapa-${etapa.id}`}
                 onSelect={() => {
-                  router.push(`/etapas/${etapa.id}`);
+                  router.push(`/etapas/${encodeURIComponent(etapa.id)}`);
                   onOpenChange(false);
                 }}
               >
@@ -104,7 +104,7 @@ export function BuscaGlobal({ open, onOpenChange }: BuscaGlobalProps) {
                 key={anotacao.id}
                 value={`anotacao-${anotacao.id}`}
                 onSelect={() => {
-                  router.push(`/etapas/${anotacao.etapaId}`);
+                  router.push(`/etapas/${encodeURIComponent(anotacao.etapaId)}`);
                   onOpenChange(false);
                 }}
               >

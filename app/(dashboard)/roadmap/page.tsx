@@ -70,7 +70,7 @@ export default async function Page() {
                             : `Faltam ${diasRestantes} ${diasRestantes === 1 ? "dia" : "dias"}`}
                         </p>
                         <Button asChild variant="outline" size="sm">
-                          <Link href={`/etapas/${etapa.id}`}>
+                          <Link href={`/etapas/${encodeURIComponent(etapa.id)}`}>
                             Ver etapa
                             <ArrowRight className="h-4 w-4" aria-hidden="true" />
                           </Link>

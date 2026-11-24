@@ -122,7 +122,7 @@ export default async function DashboardPage() {
                   asChild
                   className="bg-accent text-accent-foreground hover:bg-accent/90"
                 >
-                  <Link href={`/etapas/${dados.proximaEtapa.id}`}>
+                  <Link href={`/etapas/${encodeURIComponent(dados.proximaEtapa.id)}`}>
                     Ver detalhes
                     <ArrowRight className="h-4 w-4" />
                   </Link>
@@ -160,7 +160,7 @@ export default async function DashboardPage() {
                   >
                     <div>
                       <Link
-                        href={`/etapas/${etapa.etapaId}`}
+                        href={`/etapas/${encodeURIComponent(etapa.etapaId)}`}
                         className="font-medium hover:underline"
                       >
                         {etapa.titulo}

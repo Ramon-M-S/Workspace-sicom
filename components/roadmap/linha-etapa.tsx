@@ -53,7 +53,7 @@ export function LinhaEtapa({ etapa }: { etapa: EtapaLinha }) {
 
   return (
     <Link
-      href={`/etapas/${etapa.id}`}
+      href={`/etapas/${encodeURIComponent(etapa.id)}`}
       className="flex items-center gap-4 rounded-md border p-3 transition-colors hover:bg-muted/50"
     >
       <div className="shrink-0">

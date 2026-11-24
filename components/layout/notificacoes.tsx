@@ -104,7 +104,7 @@ export function Notificacoes() {
                   return (
                     <li key={etapa.id}>
                       <Link
-                        href={`/etapas/${etapa.id}`}
+                        href={`/etapas/${encodeURIComponent(etapa.id)}`}
                         onClick={() => setAberto(false)}
                         className="flex gap-3 px-4 py-3 transition-colors hover:bg-muted/50"
                       >

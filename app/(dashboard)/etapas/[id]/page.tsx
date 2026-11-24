@@ -4,7 +4,8 @@ import { DetalheEtapa } from "@/components/etapas/detalhe-etapa";
 import { buscarEtapaDetalhe } from "@/lib/queries/etapa-detalhe";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const etapa = await buscarEtapaDetalhe(params.id);
+  const id = decodeURIComponent(params.id);
+  const etapa = await buscarEtapaDetalhe(id);
   if (!etapa) notFound();
 
   const etapaSerializada = {

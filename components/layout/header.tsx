@@ -15,15 +15,11 @@ import {
 } from "@/components/ui/sheet";
 import { SidebarMobile } from "@/components/layout/sidebar";
 
-type HeaderProps = {
-  title?: string;
-};
-
-export function Header({ title = "Prumo" }: HeaderProps) {
+export function Header() {
   const [buscaAberta, setBuscaAberta] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 flex h-14 items-center gap-4 overflow-visible border-b bg-background px-6">
+    <header className="sticky top-0 z-50 flex h-14 items-center gap-4 overflow-visible border-b bg-background px-4 sm:px-6">
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon" className="md:hidden" aria-label="Abrir menu">
@@ -35,20 +31,21 @@ export function Header({ title = "Prumo" }: HeaderProps) {
         </SheetContent>
       </Sheet>
 
-      <h2 className="flex-1 text-base font-semibold">{title}</h2>
-      <Button
-        variant="outline"
-        className="hidden w-64 justify-start text-muted-foreground sm:flex"
-        onClick={() => setBuscaAberta(true)}
-      >
-        <Search className="mr-2 h-4 w-4" />
-        Buscar...
-        <kbd className="ml-auto text-xs">Ctrl K</kbd>
-      </Button>
-      <Notificacoes />
-      <ThemeToggle />
-      <Badge variant="secondary">2026.2</Badge>
-      <UserMenu />
+      <div className="ml-auto flex min-w-0 items-center justify-end gap-2 sm:gap-3">
+        <Button
+          variant="outline"
+          className="hidden w-64 justify-start text-muted-foreground sm:flex"
+          onClick={() => setBuscaAberta(true)}
+        >
+          <Search className="mr-2 h-4 w-4" />
+          Buscar...
+          <kbd className="ml-auto text-xs">Ctrl K</kbd>
+        </Button>
+        <Notificacoes />
+        <ThemeToggle />
+        <Badge variant="secondary">2026.2</Badge>
+        <UserMenu />
+      </div>
       <BuscaGlobal open={buscaAberta} onOpenChange={setBuscaAberta} />
     </header>
   );

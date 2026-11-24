@@ -17,9 +17,9 @@ const colors = [
 
 export default function BrandbookPage() {
   return (
-    <main className="min-h-screen bg-[#F5F7F2] px-5 py-10 text-[#18352F] print:p-0">
+    <main className="a4-page text-[#18352F]">
       <div className="mx-auto max-w-4xl space-y-8 print:max-w-none print:space-y-0">
-        <section className="flex min-h-[72vh] flex-col items-center justify-center rounded-3xl border border-[#DDE8E0] bg-[#F5F7F2] px-8 py-16 text-center shadow-sm print:min-h-0 print:h-[260mm] print:break-after-page print:rounded-none print:border-0 print:bg-[#F5F7F2] print:shadow-none">
+        <section className="page-break flex min-h-[72vh] flex-col items-center justify-center rounded-3xl border border-[#DDE8E0] bg-[#F5F7F2] px-8 py-16 text-center shadow-sm print:min-h-0 print:h-[257mm] print:break-after-page print:rounded-none print:border-0 print:bg-[#F5F7F2] print:shadow-none">
           <Logo size={150} decorative className="mb-8" />
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#52665F]">
             Identidade de marca
@@ -34,7 +34,7 @@ export default function BrandbookPage() {
           <p className="mt-16 text-sm text-[#52665F]">Versão oficial · 2026</p>
         </section>
 
-        <section className="rounded-3xl border border-[#DDE8E0] bg-white p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
+        <section className="page-break rounded-3xl border border-[#DDE8E0] bg-white p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
           <SectionHeading number="01" title="A Essência" subtitle="O que o Prumo é" />
           <div className="mt-8 grid gap-4 sm:grid-cols-3 print:grid-cols-3">
             <InfoCard title="Propósito">
@@ -55,7 +55,7 @@ export default function BrandbookPage() {
           </blockquote>
         </section>
 
-        <section className="rounded-3xl border border-[#DDE8E0] bg-white p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
+        <section className="page-break rounded-3xl border border-[#DDE8E0] bg-white p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
           <SectionHeading number="0.2" title="O Logotipo" subtitle="Pêndulo em Movimento" />
           <p className="mt-4 max-w-2xl leading-relaxed text-[#52665F]">
             O Prumo em movimento contínuo. O traço em &apos;S&apos; representa o
@@ -79,7 +79,7 @@ export default function BrandbookPage() {
           </p>
         </section>
 
-        <section className="rounded-3xl border border-[#DDE8E0] bg-white p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
+        <section className="page-break rounded-3xl border border-[#DDE8E0] bg-white p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
           <SectionHeading number="03" title="Paleta de Cores" subtitle="Eixo Sereno" />
           <p className="mt-4 max-w-2xl leading-relaxed text-[#52665F]">
             O pinho ancora a identidade; o linho cria uma superfície confortável;
@@ -104,7 +104,7 @@ export default function BrandbookPage() {
           </div>
         </section>
 
-        <section className="rounded-3xl border border-[#DDE8E0] bg-white p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
+        <section className="page-break rounded-3xl border border-[#DDE8E0] bg-white p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
           <SectionHeading number="04" title="Tipografia" subtitle="Clareza para cada escala" />
           <div className="mt-8 grid gap-8 md:grid-cols-2 print:grid-cols-2">
             <div className="break-inside-avoid">

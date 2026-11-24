@@ -11,84 +11,110 @@
 }
 
 @layer base {
-  .theme {
-    --font-heading: var(--font-sans);
-    --font-sans: var(--font-sans);
-  }
   :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
+    --font-sans: var(--font-source-sans-3);
+    --font-heading: var(--font-newsreader);
+
+    /* Direção A — Eixo Sereno */
+    --background: 84 23.8% 95.9%; /* #F5F7F2 — Linho */
+    --foreground: 167.6 37.7% 15.1%; /* #18352F — Tinta */
+    --card: 84 23.8% 95.9%;
+    --card-foreground: 167.6 37.7% 15.1%;
+    --popover: 84 23.8% 95.9%;
+    --popover-foreground: 167.6 37.7% 15.1%;
+    --primary: 170.4 56% 19.6%; /* #164E45 — Pinho */
+    --primary-foreground: 84 23.8% 95.9%; /* #F5F7F2 — Linho */
+    --secondary: 136.4 19.3% 88.8%; /* #DDE8E0 — Verde névoa */
+    --secondary-foreground: 167.6 37.7% 15.1%;
+    --muted: 111.4 14.9% 90.8%; /* #E5EBE4 — Linho sombreado */
+    --muted-foreground: 159 10.9% 36.1%; /* #52665F — Musgo */
+    --accent: 38.8 64.7% 57.8%; /* #D9A84E — Latão */
+    --accent-foreground: 167.6 37.7% 15.1%;
+    --destructive: 0 44.5% 44.5%; /* #A43F3F */
+    --destructive-foreground: 84 23.8% 95.9%;
+    --border: 133.3 8.9% 80.2%; /* #C8D1CA — divisores sutis */
+    --input: 148.4 7.8% 52%; /* #7B8E84 — contorno de campos */
+    --ring: 170.4 56% 19.6%;
+    --chart-1: 170.4 56% 19.6%;
+    --chart-2: 38.8 64.7% 57.8%;
+    --chart-3: 159 10.9% 36.1%;
+    --chart-4: 148.8 12.3% 60.2%;
+    --chart-5: 148.4 7.8% 52%;
     --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+    --sidebar: 84 23.8% 95.9%;
+    --sidebar-foreground: 167.6 37.7% 15.1%;
+    --sidebar-primary: 170.4 56% 19.6%;
+    --sidebar-primary-foreground: 84 23.8% 95.9%;
+    --sidebar-accent: 136.4 19.3% 88.8%;
+    --sidebar-accent-foreground: 167.6 37.7% 15.1%;
+    --sidebar-border: 133.3 8.9% 80.2%;
+    --sidebar-ring: 170.4 56% 19.6%;
   }
+
   .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+    --background: 170.3 49.2% 12.4%; /* #102F2A — Pinho profundo */
+    --foreground: 84 23.8% 95.9%;
+    --card: 167.6 37.7% 15.1%; /* #18352F */
+    --card-foreground: 84 23.8% 95.9%;
+    --popover: 167.6 37.7% 15.1%;
+    --popover-foreground: 84 23.8% 95.9%;
+    --primary: 157.7 25.2% 72.7%; /* #A8CBBE — Pinho claro */
+    --primary-foreground: 170.3 49.2% 12.4%;
+    --secondary: 169.1 33.3% 19.4%; /* #21423C */
+    --secondary-foreground: 84 23.8% 95.9%;
+    --muted: 169.1 33.3% 19.4%;
+    --muted-foreground: 151.8 15.3% 78.2%; /* #BFD0C8 */
+    --accent: 38.8 64.7% 57.8%; /* #D9A84E — Latão */
+    --accent-foreground: 170.3 49.2% 12.4%;
+    --destructive: 0 39.4% 47.3%; /* #A84949 */
+    --destructive-foreground: 84 23.8% 95.9%;
+    --border: 166.5 28.4% 21.4%; /* #27463F */
+    --input: 159.3 13.1% 43.3%;
+    --ring: 38.8 64.7% 57.8%;
+    --chart-1: 157.7 25.2% 72.7%;
+    --chart-2: 38.8 64.7% 57.8%;
+    --chart-3: 151.8 15.3% 78.2%;
+    --chart-4: 148.8 12.3% 60.2%;
+    --chart-5: 159.3 13.1% 43.3%;
+    --sidebar: 170.3 49.2% 12.4%;
+    --sidebar-foreground: 84 23.8% 95.9%;
+    --sidebar-primary: 157.7 25.2% 72.7%;
+    --sidebar-primary-foreground: 170.3 49.2% 12.4%;
+    --sidebar-accent: 169.1 33.3% 19.4%;
+    --sidebar-accent-foreground: 84 23.8% 95.9%;
+    --sidebar-border: 166.5 28.4% 21.4%;
+    --sidebar-ring: 38.8 64.7% 57.8%;
   }
+
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
+
   html {
     @apply font-sans;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 16mm;
+  }
+
+  html,
+  body {
+    background: #f5f7f2 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 }

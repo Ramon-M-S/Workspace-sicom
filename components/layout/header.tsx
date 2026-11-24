@@ -19,7 +19,7 @@ type HeaderProps = {
   title?: string;
 };
 
-export function Header({ title = "TCC SICOM" }: HeaderProps) {
+export function Header({ title = "Prumo" }: HeaderProps) {
   const [buscaAberta, setBuscaAberta] = useState(false);
 
   return (

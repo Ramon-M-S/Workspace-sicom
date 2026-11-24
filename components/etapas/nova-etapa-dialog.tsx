@@ -17,14 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-const fases = [
-  { id: "fase-planejamento", nome: "Planejamento" },
-  { id: "fase-analise", nome: "Análise" },
-  { id: "fase-projeto", nome: "Projeto" },
-  { id: "fase-desenvolvimento", nome: "Desenvolvimento" },
-  { id: "fase-monografia", nome: "Monografia" },
-];
-
 function itensPorLinha(valor: FormDataEntryValue | null) {
   return String(valor ?? "")
     .split("\n")
@@ -100,7 +92,7 @@ export function NovaEtapaDialog({ fases }: { fases: Array<{ id: string; nome: st
         <DialogHeader>
           <DialogTitle>Nova etapa</DialogTitle>
           <DialogDescription>
-            Preencha os dados da etapa do TCC SICOM.
+            Preencha os dados da etapa do seu TCC.
           </DialogDescription>
         </DialogHeader>
 

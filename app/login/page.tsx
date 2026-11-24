@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { Logo } from "@/components/layout/logo";
 
 export default function LoginPage() {
   const [erro, setErro] = useState(false);
@@ -36,17 +37,34 @@ export default function LoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-4">
       <form onSubmit={entrar} className="w-full max-w-sm space-y-5 rounded-xl border bg-card p-8 shadow-sm">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-semibold">Entrar no SICOM</h1>
-          <p className="text-sm text-muted-foreground">Acesse sua conta para continuar.</p>
+        <div className="flex items-center gap-3">
+          <Logo size={44} decorative />
+          <div className="space-y-1">
+            <h1 className="font-display text-2xl font-semibold">Entrar no Prumo</h1>
+            <p className="text-sm text-muted-foreground">
+              Acesse sua conta para continuar.
+            </p>
+          </div>
         </div>
         <label className="block space-y-2 text-sm font-medium">
           E-mail
-          <input name="email" type="email" autoComplete="email" required className="w-full rounded-md border bg-background px-3 py-2 font-normal" />
+          <input
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            className="w-full rounded-md border border-input bg-background px-3 py-2 font-normal"
+          />
         </label>
         <label className="block space-y-2 text-sm font-medium">
           Senha
-          <input name="password" type="password" autoComplete="current-password" required className="w-full rounded-md border bg-background px-3 py-2 font-normal" />
+          <input
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            required
+            className="w-full rounded-md border border-input bg-background px-3 py-2 font-normal"
+          />
         </label>
         {erro && <p role="alert" className="text-sm text-destructive">Credenciais inválidas</p>}
         <button type="submit" disabled={enviando} className="w-full rounded-md bg-primary px-4 py-2 text-primary-foreground disabled:opacity-60">
@@ -56,6 +74,11 @@ export default function LoginPage() {
           Não tem uma conta?{" "}
           <Link href="/registro" className="font-medium text-primary hover:underline">
             Cadastre-se
+          </Link>
+        </div>
+        <div className="text-center text-xs text-muted-foreground">
+          <Link href="/brandbook" className="underline-offset-4 hover:text-primary hover:underline">
+            Guia de Marca do Prumo
           </Link>
         </div>
       </form>

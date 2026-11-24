@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { AlertTriangle, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,7 +33,7 @@ export default async function DashboardPage() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold">Dashboard</h1>
-          <p className="text-muted-foreground">Acompanhe o progresso do TCC SICOM.</p>
+          <p className="text-muted-foreground">Acompanhe o progresso do seu TCC.</p>
         </div>
         <BotaoExportarPdf etapas={dados.etapas} fases={dados.fases} />
       </div>
@@ -92,7 +92,7 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent className="flex flex-1 flex-col items-center justify-center p-2 pt-0">
             <p
-              className={`text-3xl font-bold ${dados.totais.atrasadas > 0 ? "text-red-600" : "text-muted-foreground"}`}
+              className={`text-3xl font-bold ${dados.totais.atrasadas > 0 ? "text-primary" : "text-muted-foreground"}`}
             >
               {dados.totais.atrasadas}
             </p>
@@ -101,7 +101,7 @@ export default async function DashboardPage() {
         </Card>
       </section>
 
-      <Card>
+      <Card className="border-l-4 border-l-accent">
           <CardHeader>
             <CardTitle>Próxima etapa</CardTitle>
           </CardHeader>
@@ -118,7 +118,10 @@ export default async function DashboardPage() {
                     <span>Até {formatarData(dados.proximaEtapa.fim)}</span>
                   </div>
                 </div>
-                <Button asChild variant="outline">
+                <Button
+                  asChild
+                  className="bg-accent text-accent-foreground hover:bg-accent/90"
+                >
                   <Link href={`/etapas/${dados.proximaEtapa.id}`}>
                     Ver detalhes
                     <ArrowRight className="h-4 w-4" />

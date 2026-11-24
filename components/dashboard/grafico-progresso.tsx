@@ -11,9 +11,9 @@ type GraficoProgressoProps = {
 
 export function GraficoProgresso({ concluidas, emAndamento, pendentes, percentual }: GraficoProgressoProps) {
   const dados = [
-    { name: "Concluídas", value: concluidas, color: "#22c55e" },
-    { name: "Em Andamento", value: emAndamento, color: "#3b82f6" },
-    { name: "Pendentes", value: pendentes, color: "#e5e7eb" },
+    { name: "Concluídas", value: concluidas, color: "hsl(var(--chart-1))" },
+    { name: "Em Andamento", value: emAndamento, color: "hsl(var(--chart-2))" },
+    { name: "Pendentes", value: pendentes, color: "hsl(var(--chart-5))" },
   ];
 
   return (
@@ -29,10 +29,11 @@ export function GraficoProgresso({ concluidas, emAndamento, pendentes, percentua
           dominantBaseline="middle"
           fontSize={24}
           fontWeight="bold"
+          fill="hsl(var(--foreground))"
         >
           {percentual}%
         </text>
-        <Tooltip contentStyle={{ backgroundColor: "var(--background)", borderColor: "var(--border)" }} />
+        <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", borderColor: "hsl(var(--border))" }} />
       </PieChart>
     </ResponsiveContainer>
   );

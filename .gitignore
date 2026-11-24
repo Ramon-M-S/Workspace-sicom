@@ -56,3 +56,4 @@ playwright/.auth/
 # Uploads (arquivos físicos não vão para o git)
 public/uploads/*
 !public/uploads/.gitkeep
+.gemini/

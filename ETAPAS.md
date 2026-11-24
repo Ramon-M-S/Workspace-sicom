@@ -48,15 +48,18 @@
 - [x] 5.3 Build de produção validado
 
 ## Fase 6 — Melhorias e Polimento
+
 - [x] 6.1 Busca Global (Ctrl+K)
 - [x] 6.2 Notificações no Sistema (Sino)
-- [x] 6.3 Anexos nas Etapas (Upload de PDF/Imagens)
+- [x] 6.3 Anexos nas Etapas
 - [x] 6.4 Exportar Relatório PDF
-- [x] 6.5 Gráficos no Dashboard (Recharts)
-- [x] 6.6 Histórico de Alterações (Log)
-- [x] 6.7 Modo Escuro (Dark Mode)
-- [x] 6.8 Visão Kanban (Drag & Drop)
-- [x] 6.9 Calendário Integrado (Visão Mensal)
+- [x] 6.5 Gráficos no Dashboard
+- [x] 6.6 Histórico de Alterações
+- [x] 6.7 Modo Escuro
+- [x] 6.8 Visão Kanban
+- [x] 6.9 Calendário Integrado
+- [x] 6.10 Autenticação e Multi-tenant
+- [x] 6.11 Cadastro de novos usuários com sistema limpo
 
 ---
 

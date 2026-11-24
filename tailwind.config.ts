@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const colorToken = (name: string) =>
-  `oklch(from var(${name}) l c h / <alpha-value>)`;
+  `hsl(var(${name}) / <alpha-value>)`;
 
 const config: Config = {
   content: [
@@ -11,6 +11,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-source-sans-3)", "Arial", "sans-serif"],
+        serif: ["var(--font-newsreader)", "Georgia", "serif"],
+        display: ["var(--font-newsreader)", "Georgia", "serif"],
+        heading: ["var(--font-newsreader)", "Georgia", "serif"],
+      },
       colors: {
         background: colorToken("--background"),
         foreground: colorToken("--foreground"),

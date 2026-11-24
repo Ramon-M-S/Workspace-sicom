@@ -3,7 +3,7 @@ import { FormConfiguracoes } from "@/components/configuracoes/form-configuracoes
 import { prisma } from "@/lib/prisma";
 import { getUsuarioLogado } from "@/lib/auth-utils";
 
-export const metadata: Metadata = { title: "Configurações | SICOM" };
+export const metadata: Metadata = { title: "Configurações | Prumo" };
 
 export default async function ConfiguracoesPage() {
   const usuarioId = await getUsuarioLogado();

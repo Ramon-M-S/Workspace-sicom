@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { cn } from "cn";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/layout/logo";
 
 const navigation = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -42,7 +43,15 @@ function SidebarContents({
           isCollapsed ? "flex justify-center px-2" : "px-6",
         )}
       >
-        <h1 className="text-lg font-semibold">{isCollapsed ? "S" : "SICOM"}</h1>
+        <h1
+          className={cn(
+            "flex items-center font-display text-lg font-semibold",
+            isCollapsed ? "justify-center" : "gap-2.5",
+          )}
+        >
+          <Logo size={isCollapsed ? 32 : 28} decorative={!isCollapsed} />
+          {!isCollapsed && <span>Prumo</span>}
+        </h1>
       </div>
       <nav className={cn("flex flex-col gap-1", isCollapsed ? "p-2" : "p-4")}>
         {navigation.map(({ href, label, icon: Icon }) => {
@@ -60,8 +69,8 @@ function SidebarContents({
                 "flex items-center rounded-md py-2 text-sm",
                 isCollapsed ? "justify-center px-0" : "gap-3 px-3",
                 ativo
-                  ? "bg-accent text-accent-foreground"
-                  : "text-muted-foreground hover:bg-accent/50",
+                  ? "bg-secondary text-secondary-foreground"
+                  : "text-muted-foreground hover:bg-secondary",
               )}
             >
               <Icon className="h-4 w-4" />

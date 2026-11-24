@@ -55,7 +55,7 @@ export default function RegistroPage() {
     <main className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl">Criar conta no SICOM</CardTitle>
+          <CardTitle className="text-2xl">Criar conta no Prumo</CardTitle>
           <CardDescription>Cadastre seus dados para começar a organizar seu projeto.</CardDescription>
         </CardHeader>
         <CardContent>

@@ -7,6 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Calendar,
+  FileJson,
   LayoutDashboard,
   Kanban,
   ListChecks,
@@ -23,6 +24,7 @@ const navigation = [
   { href: "/roadmap", label: "Roadmap", icon: Map },
   { href: "/calendario", label: "Calendário", icon: Calendar },
   { href: "/kanban", label: "Kanban", icon: Kanban },
+  { href: "/importar", label: "Importar", icon: FileJson },
   { href: "/configuracoes", label: "Configurações", icon: Settings },
 ];
 

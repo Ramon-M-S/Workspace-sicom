@@ -1,29 +1,37 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { executarSeed } from "@/prisma/seed-logic";
-import { getUsuarioLogado } from "@/lib/auth-utils";
+import {
+  getUsuarioLogado,
+  UsuarioNaoAutenticadoError,
+} from "@/lib/auth-utils";
 
 export async function POST() {
   if (process.env.NODE_ENV === "production") {
     return NextResponse.json({ erro: "Restauração indisponível em produção." }, { status: 403 });
   }
 
-  const usuarioId = await getUsuarioLogado().catch(() => null);
-  if (!usuarioId) {
-    return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
-  }
-
   try {
-    await prisma.$transaction([
-      prisma.anotacao.deleteMany({ where: { usuarioId } }),
-      prisma.lembrete.deleteMany({ where: { etapa: { usuarioId } } }),
-      prisma.etapa.deleteMany({ where: { usuarioId } }),
-      prisma.fase.deleteMany({ where: { usuarioId } }),
-    ]);
-    await executarSeed(usuarioId);
+    const usuarioId = await getUsuarioLogado();
 
-    return NextResponse.json({ mensagem: "Dados restaurados com sucesso!" });
+    await prisma.$transaction(async (tx) => {
+      await tx.logAlteracao.deleteMany({ where: { usuarioId } });
+      await tx.anexo.deleteMany({ where: { usuarioId } });
+      await tx.anotacao.deleteMany({ where: { usuarioId } });
+      await tx.lembrete.deleteMany({ where: { etapa: { usuarioId } } });
+      await tx.etapa.deleteMany({ where: { usuarioId } });
+      await tx.fase.deleteMany({ where: { usuarioId } });
+      await tx.configuracao.deleteMany({ where: { usuarioId } });
+    });
+    await executarSeed(usuarioId, true);
+
+    return NextResponse.json({
+      mensagem: "Seu perfil foi completamente resetado para os padrões de fábrica.",
+    });
   } catch (error) {
+    if (error instanceof UsuarioNaoAutenticadoError) {
+      return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
+    }
     console.error("[api] erro ao restaurar os dados:", error);
     return NextResponse.json({ erro: "Não foi possível restaurar os dados." }, { status: 500 });
   }

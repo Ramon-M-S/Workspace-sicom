@@ -86,7 +86,7 @@ export function FormConfiguracoes({ configuracao, etapas, anotacoes }: Props) {
         throw new Error(resultado.erro ?? "Não foi possível restaurar os dados.");
       }
       setDialogAberto(false);
-      toast.success(resultado.mensagem);
+      toast.success("Perfil restaurado com sucesso.");
       router.refresh();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Erro ao restaurar os dados.");
@@ -222,7 +222,7 @@ export function FormConfiguracoes({ configuracao, etapas, anotacoes }: Props) {
           <DialogHeader>
             <DialogTitle>Restaurar dados de fábrica?</DialogTitle>
             <DialogDescription>
-              A restauração apagará etapas e anotações atuais e retornará o sistema aos dados iniciais. Essa ação não pode ser desfeita.
+              Isso apagará TODAS as suas etapas, anotações, anexos e configurações. Esta ação não pode ser desfeita.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

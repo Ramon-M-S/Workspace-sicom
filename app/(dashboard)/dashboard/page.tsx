@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { format } from "date-fns";
+import { differenceInDays, format, startOfToday } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +16,7 @@ import { GraficoProgresso } from "@/components/dashboard/grafico-progresso";
 import { GraficoFases } from "@/components/dashboard/grafico-fases";
 
 function formatarData(data: string) {
-  return format(new Date(data), "dd/MM/yyyy", { locale: ptBR });
+  return format(new Date(`${data.slice(0, 10)}T12:00:00`), "dd/MM/yyyy", { locale: ptBR });
 }
 
 function textoDias(dias: number) {
@@ -27,30 +27,77 @@ function textoDias(dias: number) {
 
 export default async function DashboardPage() {
   const dados = await buscarDadosDashboard();
+  const diasAteDefesa = dados.configuracao?.dataDefesa
+    ? differenceInDays(
+        new Date(`${dados.configuracao.dataDefesa}T00:00:00`),
+        startOfToday(),
+      )
+    : null;
+  const cardContagemRegressiva =
+    diasAteDefesa !== null && dados.configuracao?.dataDefesa ? (
+      <Card className="flex h-[120px] flex-col border-accent/50">
+        <CardHeader className="p-3 pb-0">
+          <CardTitle className="text-sm font-normal text-muted-foreground">
+            Defesa
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-1 flex-col items-center justify-center p-2 pt-0 text-center">
+          <p className="text-xl font-semibold">
+            {diasAteDefesa === 0
+              ? "A defesa é hoje!"
+              : diasAteDefesa < 0
+                ? "Defesa realizada"
+                : `Faltam ${diasAteDefesa} ${diasAteDefesa === 1 ? "dia" : "dias"} para a defesa`}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            {formatarData(dados.configuracao.dataDefesa)}
+          </p>
+        </CardContent>
+      </Card>
+    ) : null;
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold">Dashboard</h1>
+          <h1 className="font-display text-3xl font-semibold">
+            {dados.configuracao?.nomeProjeto || "Meu TCC"}
+          </h1>
           <p className="text-muted-foreground">Acompanhe o progresso do seu TCC.</p>
+          {dados.configuracao?.dataInicio && (
+            <p className="mt-1 text-xs text-muted-foreground">
+              Iniciado em {formatarData(dados.configuracao.dataInicio)}
+            </p>
+          )}
         </div>
         <BotaoExportarPdf etapas={dados.etapas} fases={dados.fases} />
       </div>
 
       {dados.totais.etapas === 0 ? (
-        <Card>
-          <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground">
-              Nenhuma etapa cadastrada.
-            </p>
-          </CardContent>
-        </Card>
+        <>
+          {cardContagemRegressiva}
+          <Card>
+            <CardContent className="flex flex-col items-center gap-5 py-12 text-center">
+              <p className="max-w-xl text-muted-foreground">
+                Seu caminho está pronto para começar. Que tal usar o Importador de
+                Cronograma ou criar a sua primeira etapa?
+              </p>
+              <div className="flex flex-col justify-center gap-3 sm:flex-row">
+                <Button asChild>
+                  <Link href="/etapas">Criar primeira etapa</Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link href="/importar">Importar Cronograma</Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </>
       ) : (
       <>
       <section
         aria-label="Resumo do projeto"
-        className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4"
+        className={`grid grid-cols-1 gap-4 md:grid-cols-2 ${dados.configuracao?.dataDefesa ? "lg:grid-cols-5" : "lg:grid-cols-4"}`}
       >
         <Card className="flex h-[120px] flex-col">
           <CardHeader className="p-3 pb-0">
@@ -65,6 +112,8 @@ export default async function DashboardPage() {
             />
           </CardContent>
         </Card>
+
+        {cardContagemRegressiva}
 
         <Card className="flex h-[120px] flex-col">
           <CardHeader className="p-3 pb-0">

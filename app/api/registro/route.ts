@@ -1,14 +1,8 @@
 import { NextResponse } from "next/server";
 import { hash } from "bcryptjs";
-import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { executarSeed } from "@/prisma/seed-logic";
-
-const schemaRegistro = z.object({
-  nome: z.string().trim().min(1).max(120),
-  email: z.string().trim().email().max(254),
-  senha: z.string().min(8).max(128),
-});
+import { registroSchema } from "@/lib/validations/registro";
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -18,7 +12,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ erro: "Corpo da requisição inválido." }, { status: 400 });
   }
 
-  const validacao = schemaRegistro.safeParse(body);
+  const validacao = registroSchema.safeParse(body);
   if (!validacao.success) {
     return NextResponse.json({ erro: "Dados inválidos.", detalhes: validacao.error.flatten().fieldErrors }, { status: 400 });
   }
@@ -38,6 +32,14 @@ export async function POST(request: Request) {
     });
     usuarioCriadoId = usuario.id;
     await executarSeed(usuario.id, true);
+    await prisma.configuracao.update({
+      where: { usuarioId: usuario.id },
+      data: {
+        nomeProjeto: validacao.data.nomeProjeto || "Meu TCC",
+        dataInicio: validacao.data.dataInicio ?? new Date(),
+        dataDefesa: validacao.data.dataDefesa ?? null,
+      },
+    });
     return NextResponse.json({ usuario }, { status: 201 });
   } catch (error) {
     if (usuarioCriadoId) {

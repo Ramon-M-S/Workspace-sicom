@@ -4,6 +4,11 @@ import { prisma } from "@/lib/prisma";
 import { getUsuarioLogado } from "@/lib/auth-utils";
 
 export async function buscarDadosDashboard(): Promise<{
+  configuracao: {
+    nomeProjeto: string;
+    dataInicio: string;
+    dataDefesa: string | null;
+  } | null;
   etapas: Array<{
     id: string;
     titulo: string;
@@ -51,11 +56,21 @@ export async function buscarDadosDashboard(): Promise<{
   const inicioHoje = startOfDay(agora);
   const fimJanelaLembretes = addDays(agora, 7);
 
-  const fasesComEtapas = await prisma.fase.findMany({
-    where: { usuarioId },
-    orderBy: { ordem: "asc" },
-    include: { etapas: { where: { usuarioId } } },
-  });
+  const [configuracaoBanco, fasesComEtapas] = await Promise.all([
+    prisma.configuracao.findUnique({ where: { usuarioId } }),
+    prisma.fase.findMany({
+      where: { usuarioId },
+      orderBy: { ordem: "asc" },
+      include: { etapas: { where: { usuarioId } } },
+    }),
+  ]);
+  const configuracao = configuracaoBanco
+    ? {
+        nomeProjeto: configuracaoBanco.nomeProjeto,
+        dataInicio: configuracaoBanco.dataInicio.toISOString().slice(0, 10),
+        dataDefesa: configuracaoBanco.dataDefesa?.toISOString().slice(0, 10) ?? null,
+      }
+    : null;
 
   const todasEtapas = fasesComEtapas.flatMap((fase) =>
     fase.etapas.map((etapa) => ({ ...etapa, faseNome: fase.nome })),
@@ -129,6 +144,7 @@ export async function buscarDadosDashboard(): Promise<{
   }));
 
   return {
+    configuracao,
     etapas,
     fases,
     proximaEtapa: proxima

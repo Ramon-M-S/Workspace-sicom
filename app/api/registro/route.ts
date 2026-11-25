@@ -32,14 +32,6 @@ export async function POST(request: Request) {
     });
     usuarioCriadoId = usuario.id;
     await executarSeed(usuario.id, true);
-    await prisma.configuracao.update({
-      where: { usuarioId: usuario.id },
-      data: {
-        nomeProjeto: validacao.data.nomeProjeto || "Meu TCC",
-        dataInicio: validacao.data.dataInicio ?? new Date(),
-        dataDefesa: validacao.data.dataDefesa ?? null,
-      },
-    });
     return NextResponse.json({ usuario }, { status: 201 });
   } catch (error) {
     if (usuarioCriadoId) {

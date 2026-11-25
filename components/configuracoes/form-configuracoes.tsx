@@ -101,7 +101,7 @@ export function FormConfiguracoes({ configuracao, etapas, anotacoes }: Props) {
           <CardTitle>Perfil do Projeto</CardTitle>
           <CardDescription>Informações básicas para organizar o cronograma do projeto.</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
           <form
             className="space-y-5"
             onSubmit={(event) => salvar(event, {
@@ -137,7 +137,7 @@ export function FormConfiguracoes({ configuracao, etapas, anotacoes }: Props) {
           <CardTitle>Automação</CardTitle>
           <CardDescription>Defina como e quando os lembretes de prazo serão enviados.</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
           <form
             className="space-y-5"
             onSubmit={(event) => salvar(event, {
@@ -193,7 +193,7 @@ export function FormConfiguracoes({ configuracao, etapas, anotacoes }: Props) {
         <CardTitle>Dados do Projeto</CardTitle>
         <CardDescription>Resumo dos registros armazenados no sistema.</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="flex items-center gap-3 rounded-lg border p-4">
             <Database className="size-5 text-muted-foreground" />
@@ -204,7 +204,7 @@ export function FormConfiguracoes({ configuracao, etapas, anotacoes }: Props) {
             <p className="font-medium">{anotacoes} {anotacoes === 1 ? "anotação" : "anotações"}</p>
           </div>
         </div>
-        <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4">
+        <div className="space-y-3 rounded-lg border border-destructive/50 bg-destructive/5 p-4">
           <div className="flex items-start gap-3">
             <AlertTriangle className="mt-0.5 size-5 shrink-0 text-destructive" />
             <div className="flex-1 space-y-1">
@@ -212,9 +212,11 @@ export function FormConfiguracoes({ configuracao, etapas, anotacoes }: Props) {
               <p className="text-sm text-muted-foreground">Esta ação remove os dados atuais e restaura a configuração inicial do sistema.</p>
             </div>
           </div>
-          <Button type="button" variant="destructive" className="mt-4" onClick={() => setDialogAberto(true)}>
-            Restaurar Dados de Fábrica
-          </Button>
+          <div>
+            <Button type="button" variant="destructive" onClick={() => setDialogAberto(true)}>
+              Restaurar Dados de Fábrica
+            </Button>
+          </div>
         </div>
       </CardContent>
       <Dialog open={dialogAberto} onOpenChange={setDialogAberto}>

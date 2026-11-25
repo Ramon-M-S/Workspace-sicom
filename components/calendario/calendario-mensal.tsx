@@ -43,6 +43,7 @@ export function CalendarioMensal({ etapas }: { etapas: EtapaCalendario[] }) {
   const inicioGrid = startOfWeek(inicioMes, { weekStartsOn: 0 });
   const fimGrid = endOfWeek(fimMes, { weekStartsOn: 0 });
   const diasGrid = eachDayOfInterval({ start: inicioGrid, end: fimGrid });
+  const numeroDeSemanas = Math.ceil(diasGrid.length / 7);
   const etapasPorDia = useMemo(() => {
     return etapas.map((etapa) => ({
       ...etapa,
@@ -52,8 +53,8 @@ export function CalendarioMensal({ etapas }: { etapas: EtapaCalendario[] }) {
   }, [etapas]);
 
   return (
-    <section className="space-y-4" aria-label="Calendário mensal de prazos">
-      <header className="flex items-center justify-between gap-4">
+    <section className="flex h-full min-h-0 flex-1 flex-col gap-3" aria-label="Calendário mensal de prazos">
+      <header className="flex shrink-0 items-center justify-between gap-4">
         <h2 className="text-xl font-semibold capitalize">
           {format(dataAtual, "MMMM yyyy", { locale: ptBR })}
         </h2>
@@ -69,14 +70,17 @@ export function CalendarioMensal({ etapas }: { etapas: EtapaCalendario[] }) {
         </div>
       </header>
 
-      <div className="grid grid-cols-7 rounded-t-lg border border-b-0 bg-muted/40">
+      <div className="grid shrink-0 grid-cols-7 rounded-t-lg border border-b-0 bg-muted/40">
         {diasSemana.map((dia) => (
-          <div key={dia} className="p-2 text-center text-sm font-medium text-muted-foreground">
+          <div key={dia} className="p-2 text-center text-xs font-medium text-muted-foreground">
             {dia}
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-7 overflow-hidden rounded-b-lg border border-l-0 border-t-0">
+      <div
+        className="grid min-h-0 flex-1 grid-cols-7 gap-px overflow-hidden rounded-b-lg border border-border bg-border"
+        style={{ gridTemplateRows: `repeat(${numeroDeSemanas}, minmax(0, 1fr))` }}
+      >
         {diasGrid.map((dia) => {
           const eventos = etapasPorDia.flatMap((etapa) => {
             const ocorrencias = [];
@@ -89,21 +93,21 @@ export function CalendarioMensal({ etapas }: { etapas: EtapaCalendario[] }) {
             <div
               key={dia.toISOString()}
               className={cn(
-                "min-h-28 border-b border-l p-2",
+                "flex min-h-0 flex-col overflow-hidden bg-background p-2",
                 !isSameMonth(dia, dataAtual) && "bg-muted/20",
               )}
               aria-label={format(dia, "d 'de' MMMM", { locale: ptBR })}
             >
               <span
                 className={cn(
-                  "inline-flex h-7 min-w-7 items-center justify-center rounded-full px-1 text-sm",
+                  "inline-flex h-6 min-w-6 shrink-0 items-center justify-center rounded-full px-1 text-xs",
                   !isSameMonth(dia, dataAtual) && "text-muted-foreground",
                   isToday(dia) && "bg-primary text-primary-foreground",
                 )}
               >
                 {format(dia, "d")}
               </span>
-              <div className="mt-1 space-y-1">
+              <div className="mt-1 min-h-0 flex-1 space-y-1 overflow-y-auto scrollbar-thin">
                 {eventos.map(({ etapa, tipo }, index) => (
                   <div
                     key={`${etapa.id}-${tipo}-${index}`}

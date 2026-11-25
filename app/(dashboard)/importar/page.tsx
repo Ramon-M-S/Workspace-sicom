@@ -4,8 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function ImportarPage() {
   return (
-    <div className="mx-auto max-w-4xl space-y-6">
-      <div className="flex items-start gap-4">
+    <div className="mx-auto flex h-full min-h-0 w-full max-w-4xl flex-col gap-4">
+      <div className="flex shrink-0 items-start gap-4">
         <div className="rounded-xl bg-primary/10 p-3 text-primary">
           <FileJson className="h-6 w-6" aria-hidden="true" />
         </div>
@@ -18,16 +18,16 @@ export default function ImportarPage() {
         </div>
       </div>
 
-      <Card>
-        <CardHeader>
+      <Card className="flex min-h-0 flex-1 flex-col">
+        <CardHeader className="shrink-0">
           <CardTitle>Script do cronograma</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex min-h-0 flex-1 flex-col space-y-4">
           <FormImportar />
         </CardContent>
       </Card>
 
-      <div className="rounded-lg border bg-muted/30 p-4 text-sm text-muted-foreground">
+      <div className="shrink-0 rounded-lg border bg-muted/30 p-4 text-sm text-muted-foreground">
         <p className="font-medium text-foreground">Formato esperado</p>
         <p className="mt-1">
           O objeto raiz contém <code className="font-mono">fases</code>. Cada fase

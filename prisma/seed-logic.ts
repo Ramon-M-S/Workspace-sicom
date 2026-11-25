@@ -42,7 +42,7 @@ export async function executarSeed(usuarioId: string, apenasFases = false) {
     where: { usuarioId },
     create: {
       usuarioId,
-      nomeProjeto: "TCC - SICOM",
+      nomeProjeto: "Meu TCC",
       ativoLembretes: true,
       diasAntecedencia: 7,
     },

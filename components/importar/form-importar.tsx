@@ -96,8 +96,8 @@ export function FormImportar() {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className="flex min-h-0 flex-1 flex-col gap-4">
+      <div className="flex shrink-0 flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-muted-foreground">
           Cole abaixo o JSON do seu cronograma.
         </p>
@@ -115,11 +115,11 @@ export function FormImportar() {
         onChange={(event) => setScript(event.target.value)}
         aria-label="Script JSON do cronograma"
         placeholder={'{\n  "fases": []\n}'}
-        className="min-h-[28rem] resize-y font-mono text-sm"
+        className="min-h-0 flex-1 resize-none font-mono text-sm"
         spellCheck={false}
         disabled={processando}
       />
-      <div className="flex justify-end">
+      <div className="flex shrink-0 justify-end">
         <Button type="button" onClick={processarScript} disabled={processando || !script.trim()}>
           {processando ? "Processando..." : "Processar Script"}
         </Button>

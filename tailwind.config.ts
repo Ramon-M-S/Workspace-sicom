@@ -45,6 +45,10 @@ const config: Config = {
           DEFAULT: colorToken("--accent"),
           foreground: colorToken("--accent-foreground"),
         },
+        brass: {
+          DEFAULT: colorToken("--brass"),
+          foreground: colorToken("--brass-foreground"),
+        },
         destructive: {
           DEFAULT: colorToken("--destructive"),
           foreground: colorToken("--destructive-foreground"),

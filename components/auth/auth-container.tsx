@@ -13,8 +13,8 @@ export function AuthContainer({
   const [isLogin, setIsLogin] = useState(initialMode === "login");
 
   return (
-    <main className="relative flex h-screen w-full items-center justify-center overflow-hidden bg-[#164E45] p-4">
-      <div className="relative flex h-[600px] max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-3xl bg-[#F5F7F2] shadow-2xl">
+    <main className="relative flex h-screen w-full items-center justify-center overflow-hidden bg-primary p-4">
+      <div className="relative flex h-[600px] max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-3xl bg-background shadow-2xl">
         <div
           className={`absolute inset-y-0 left-0 z-0 w-full transition-transform duration-700 ease-in-out lg:w-1/2 ${
             isLogin ? "translate-x-0" : "-translate-x-full"
@@ -40,20 +40,20 @@ export function AuthContainer({
         </div>
 
         <div
-          className={`absolute inset-y-0 left-1/2 z-10 hidden w-1/2 flex-col items-center justify-center overflow-hidden bg-[#164E45] p-10 text-center text-[#F5F7F2] transition-transform duration-700 ease-in-out lg:flex xl:p-12 ${
+          className={`absolute inset-y-0 left-1/2 z-10 hidden w-1/2 flex-col items-center justify-center overflow-hidden bg-primary p-10 text-center text-background transition-transform duration-700 ease-in-out lg:flex xl:p-12 ${
             isLogin ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <div className="absolute -right-20 -top-20 size-64 rounded-full border border-[#F5F7F2]/10" />
-          <div className="absolute -bottom-24 -left-16 size-72 rounded-full bg-[#D9A84E]/10 blur-2xl" />
+          <div className="absolute -right-20 -top-20 size-64 rounded-full border border-border" />
+          <div className="absolute -bottom-24 -left-16 size-72 rounded-full bg-brass/10 blur-2xl" />
           <div className="relative z-10 flex max-w-sm flex-col items-center">
-            <div className="mb-8 rounded-2xl border border-[#F5F7F2]/15 bg-[#F5F7F2]/5 p-4">
-              <Compass className="size-9 text-[#D9A84E]" strokeWidth={1.5} aria-hidden="true" />
+            <div className="mb-8 rounded-2xl border border-border bg-background/5 p-4">
+              <Compass className="size-9 text-brass-foreground" strokeWidth={1.5} aria-hidden="true" />
             </div>
             <h2 className="font-display text-4xl font-semibold leading-tight">
               {isLogin ? "Seu TCC tem um caminho." : "Que bom ter você de volta."}
             </h2>
-            <p className="mt-4 leading-relaxed text-[#F5F7F2]/80">
+            <p className="mt-4 leading-relaxed text-background/80">
               {isLogin
                 ? "Organize as etapas, encontre o próximo passo e avance no seu ritmo."
                 : "A clareza do próximo passo continua aqui. Vamos retomar de onde você parou."}
@@ -61,12 +61,12 @@ export function AuthContainer({
             <button
               type="button"
               onClick={() => setIsLogin((atual) => !atual)}
-              className="mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-full border border-[#F5F7F2]/70 px-7 text-sm font-semibold transition-colors hover:bg-[#F5F7F2] hover:text-[#164E45] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9A84E] focus-visible:ring-offset-2 focus-visible:ring-offset-[#164E45]"
+              className="mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-full border border-border px-7 text-sm font-semibold transition-colors hover:bg-background hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               {isLogin ? "Criar conta" : "Entrar na minha conta"}
               <ArrowRight className="size-4" aria-hidden="true" />
             </button>
-            <p className="mt-8 text-xs text-[#F5F7F2]/60">
+            <p className="mt-8 text-xs text-background/60">
               Respire. Um passo de cada vez.
             </p>
           </div>

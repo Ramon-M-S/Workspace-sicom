@@ -17,24 +17,24 @@ const colors = [
 
 export default function BrandbookPage() {
   return (
-    <main className="a4-page text-[#18352F]">
+    <main className="a4-page text-foreground">
       <div className="mx-auto max-w-4xl space-y-8 print:max-w-none print:space-y-0">
-        <section className="page-break flex min-h-[72vh] flex-col items-center justify-center rounded-3xl border border-[#DDE8E0] bg-[#F5F7F2] px-8 py-16 text-center shadow-sm print:min-h-0 print:h-[257mm] print:break-after-page print:rounded-none print:border-0 print:bg-[#F5F7F2] print:shadow-none">
+        <section className="page-break flex min-h-[72vh] flex-col items-center justify-center rounded-3xl border border-border bg-background px-8 py-16 text-center shadow-sm print:min-h-0 print:h-[257mm] print:break-after-page print:rounded-none print:border-0 print:bg-background print:shadow-none">
           <Logo size={150} decorative className="mb-8" />
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#52665F]">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-muted-foreground">
             Identidade de marca
           </p>
           <h1 className="font-display text-5xl font-semibold leading-tight sm:text-6xl">
             Guia de Marca
-            <span className="mt-2 block text-[#164E45]">Prumo</span>
+            <span className="mt-2 block text-primary">Prumo</span>
           </h1>
-          <p className="mt-6 font-display text-2xl italic text-[#52665F]">
+          <p className="mt-6 font-display text-2xl italic text-muted-foreground">
             O GPS do seu TCC.
           </p>
-          <p className="mt-16 text-sm text-[#52665F]">Versão oficial · 2026</p>
+          <p className="mt-16 text-sm text-muted-foreground">Versão oficial · 2026</p>
         </section>
 
-        <section className="page-break rounded-3xl border border-[#DDE8E0] bg-white p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
+        <section className="page-break rounded-3xl border border-border bg-card p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
           <SectionHeading number="01" title="A Essência" subtitle="O que o Prumo é" />
           <div className="mt-8 grid gap-4 sm:grid-cols-3 print:grid-cols-3">
             <InfoCard title="Propósito">
@@ -50,38 +50,38 @@ export default function BrandbookPage() {
               <strong>Encorajador.</strong>
             </InfoCard>
           </div>
-          <blockquote className="mt-8 rounded-2xl bg-[#E5EBE4] p-6 font-display text-2xl leading-snug text-[#18352F]">
+          <blockquote className="mt-8 rounded-2xl bg-muted p-6 font-display text-2xl leading-snug text-foreground">
             “Você cuida do seu TCC; o Prumo cuida do caminho.”
           </blockquote>
         </section>
 
-        <section className="page-break rounded-3xl border border-[#DDE8E0] bg-white p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
+        <section className="page-break rounded-3xl border border-border bg-card p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
           <SectionHeading number="0.2" title="O Logotipo" subtitle="Pêndulo em Movimento" />
-          <p className="mt-4 max-w-2xl leading-relaxed text-[#52665F]">
+          <p className="mt-4 max-w-2xl leading-relaxed text-muted-foreground">
             O Prumo em movimento contínuo. O traço em &apos;S&apos; representa o
             caminho fluido e sem atritos, conectando o peso da ancoragem
             (equilíbrio) à conquista final (a bolinha).
           </p>
           <div className="mt-8 grid gap-4 sm:grid-cols-3 print:grid-cols-3">
-            <LogoCard label="Cor original" className="bg-[#F5F7F2]">
+            <LogoCard label="Cor original" className="bg-background">
               <Logo size={92} decorative />
             </LogoCard>
-            <LogoCard label="Monocromático · Pinho" className="bg-[#F5F7F2]">
+            <LogoCard label="Monocromático · Pinho" className="bg-background">
               <Logo size={92} variant="monochrome" decorative />
             </LogoCard>
-            <LogoCard label="Invertido · Linho sobre Pinho" className="bg-[#164E45] text-[#F5F7F2]">
+            <LogoCard label="Invertido · Linho sobre Pinho" className="bg-primary text-background">
               <Logo size={92} variant="inverted" decorative />
             </LogoCard>
           </div>
-          <p className="mt-5 text-sm text-[#52665F]">
+          <p className="mt-5 text-sm text-muted-foreground">
             Preserve as proporções e as cores do símbolo. Não estique, incline ou
             aplique efeitos que prejudiquem a leitura em tamanhos pequenos.
           </p>
         </section>
 
-        <section className="page-break rounded-3xl border border-[#DDE8E0] bg-white p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
+        <section className="page-break rounded-3xl border border-border bg-card p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
           <SectionHeading number="03" title="Paleta de Cores" subtitle="Eixo Sereno" />
-          <p className="mt-4 max-w-2xl leading-relaxed text-[#52665F]">
+          <p className="mt-4 max-w-2xl leading-relaxed text-muted-foreground">
             O pinho ancora a identidade; o linho cria uma superfície confortável;
             a tinta e o musgo sustentam a leitura; o latão destaca o próximo passo.
           </p>
@@ -90,7 +90,7 @@ export default function BrandbookPage() {
               <div key={color.name} className="break-inside-avoid">
                 <div
                   className={`flex aspect-square items-end rounded-2xl p-3 print:rounded-lg ${
-                    color.border ? "border border-[#C8D1CA]" : ""
+                    color.border ? "border border-border" : ""
                   }`}
                   style={{ backgroundColor: color.hex, color: color.text }}
                   role="img"
@@ -104,23 +104,23 @@ export default function BrandbookPage() {
           </div>
         </section>
 
-        <section className="page-break rounded-3xl border border-[#DDE8E0] bg-white p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
+        <section className="page-break rounded-3xl border border-border bg-card p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
           <SectionHeading number="04" title="Tipografia" subtitle="Clareza para cada escala" />
           <div className="mt-8 grid gap-8 md:grid-cols-2 print:grid-cols-2">
             <div className="break-inside-avoid">
-              <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-[#52665F]">
+              <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
                 Newsreader · Títulos
               </p>
-              <p className="font-display text-4xl leading-tight text-[#164E45] sm:text-5xl">
+              <p className="font-display text-4xl leading-tight text-primary sm:text-5xl">
                 A clareza abre o caminho.
               </p>
-              <p className="mt-4 text-sm leading-relaxed text-[#52665F]">
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                 Use em títulos e frases de destaque. A voz editorial acrescenta
                 presença sem tirar a serenidade.
               </p>
             </div>
             <div className="break-inside-avoid">
-              <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-[#52665F]">
+              <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
                 Source Sans 3 · Texto corrido
               </p>
               <p className="font-sans text-lg leading-relaxed">
@@ -128,7 +128,7 @@ export default function BrandbookPage() {
                 O estudante mantém a autoria do trabalho e avança no próprio ritmo,
                 com método e clareza.
               </p>
-              <p className="mt-4 text-sm leading-relaxed text-[#52665F]">
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                 Use no corpo de texto, formulários, botões, prazos e informações da
                 interface. Para números alinhados, prefira algarismos tabulares.
               </p>
@@ -136,63 +136,63 @@ export default function BrandbookPage() {
           </div>
         </section>
 
-        <section className="rounded-3xl border border-[#DDE8E0] bg-white p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
+        <section className="rounded-3xl border border-border bg-card p-8 shadow-sm print:break-after-page print:rounded-none print:border-0 print:p-0 print:shadow-none">
           <SectionHeading number="05" title="Tom de Voz e Vocabulário" subtitle="Um mentor, nunca um cobrador" />
           <div className="mt-8 grid gap-5 sm:grid-cols-2 print:grid-cols-2">
-            <div className="break-inside-avoid rounded-2xl border border-[#DDE8E0] bg-[#F5F7F2] p-6">
-              <h3 className="font-display text-2xl font-semibold text-[#164E45]">
+            <div className="break-inside-avoid rounded-2xl border border-border bg-background p-6">
+              <h3 className="font-display text-2xl font-semibold text-primary">
                 Use sempre
               </h3>
               <ul className="mt-4 space-y-3">
                 {["Respire", "Próximo passo", "Vamos juntos", "No seu ritmo"].map((phrase) => (
                   <li key={phrase} className="flex items-center gap-3">
-                    <span className="h-2 w-2 rounded-full bg-[#D9A84E]" aria-hidden="true" />
+                    <span className="h-2 w-2 rounded-full bg-brass" aria-hidden="true" />
                     {phrase}
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="break-inside-avoid rounded-2xl border border-[#DDE8E0] bg-[#F5F7F2] p-6">
-              <h3 className="font-display text-2xl font-semibold text-[#52665F]">
+            <div className="break-inside-avoid rounded-2xl border border-border bg-background p-6">
+              <h3 className="font-display text-2xl font-semibold text-muted-foreground">
                 Nunca use
               </h3>
               <ul className="mt-4 space-y-3">
                 {["Urgente!", "Atrasado (como acusação)", "Erro crítico"].map((phrase) => (
                   <li key={phrase} className="flex items-center gap-3">
-                    <span className="h-2 w-2 rounded-full bg-[#52665F]" aria-hidden="true" />
+                    <span className="h-2 w-2 rounded-full bg-muted" aria-hidden="true" />
                     {phrase}
                   </li>
                 ))}
               </ul>
             </div>
           </div>
-          <p className="mt-6 rounded-xl bg-[#E5EBE4] p-5 leading-relaxed">
+          <p className="mt-6 rounded-xl bg-muted p-5 leading-relaxed">
             Acolha sem julgamento, apresente uma ação possível e reconheça o
             progresso real. O Prumo orienta; o estudante conduz o TCC.
           </p>
         </section>
 
-        <section className="rounded-3xl border border-[#DDE8E0] bg-white p-8 shadow-sm print:rounded-none print:border-0 print:p-0 print:shadow-none">
+        <section className="rounded-3xl border border-border bg-card p-8 shadow-sm print:rounded-none print:border-0 print:p-0 print:shadow-none">
           <SectionHeading number="06" title="Aplicações Práticas" subtitle="A identidade em uso" />
           <div className="mt-8 grid gap-6 md:grid-cols-2 print:grid-cols-2">
-            <div className="break-inside-avoid rounded-2xl bg-[#F5F7F2] p-6">
-              <p className="mb-4 text-sm font-semibold uppercase tracking-wide text-[#52665F]">
+            <div className="break-inside-avoid rounded-2xl bg-background p-6">
+              <p className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
                 Ação principal
               </p>
               <button
                 type="button"
-                className="rounded-xl bg-[#164E45] px-5 py-3 font-semibold text-[#F5F7F2] shadow-sm print:shadow-none"
+                className="rounded-xl bg-primary px-5 py-3 font-semibold text-background shadow-sm print:shadow-none"
               >
                 Ver próxima etapa
               </button>
             </div>
-            <div className="break-inside-avoid rounded-2xl border border-[#DDE8E0] bg-[#F5F7F2] p-6">
-              <p className="mb-4 text-sm font-semibold uppercase tracking-wide text-[#52665F]">
+            <div className="break-inside-avoid rounded-2xl border border-border bg-background p-6">
+              <p className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
                 Mensagem de erro
               </p>
-              <div className="rounded-xl border border-[#C8D1CA] bg-white p-5">
-                <p className="font-semibold text-[#18352F]">Ops, o Prumo escorregou aqui.</p>
-                <p className="mt-2 text-sm leading-relaxed text-[#52665F]">
+              <div className="rounded-xl border border-border bg-card p-5">
+                <p className="font-semibold text-foreground">Ops, o Prumo escorregou aqui.</p>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   Seu progresso está salvo. Sem pânico — tente novamente em instantes.
                 </p>
               </div>
@@ -200,7 +200,7 @@ export default function BrandbookPage() {
           </div>
         </section>
 
-        <footer className="py-6 text-center text-sm text-[#52665F] print:py-0">
+        <footer className="py-6 text-center text-sm text-muted-foreground print:py-0">
           Prumo · Você cuida do seu TCC; o Prumo cuida do caminho.
         </footer>
       </div>
@@ -218,12 +218,12 @@ function SectionHeading({
   subtitle: string;
 }) {
   return (
-    <div className="border-b border-[#DDE8E0] pb-5">
-      <p className="text-xs font-semibold tracking-[0.2em] text-[#52665F]">{number}</p>
-      <h2 className="mt-2 font-display text-3xl font-semibold text-[#164E45] sm:text-4xl">
+    <div className="border-b border-border pb-5">
+      <p className="text-xs font-semibold tracking-[0.2em] text-muted-foreground">{number}</p>
+      <h2 className="mt-2 font-display text-3xl font-semibold text-primary sm:text-4xl">
         {title}
       </h2>
-      <p className="mt-1 text-sm text-[#52665F]">{subtitle}</p>
+      <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
     </div>
   );
 }
@@ -236,9 +236,9 @@ function InfoCard({
   children: ReactNode;
 }) {
   return (
-    <div className="break-inside-avoid rounded-2xl border border-[#DDE8E0] bg-[#F5F7F2] p-5">
-      <h3 className="font-display text-xl font-semibold text-[#164E45]">{title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-[#18352F]">{children}</p>
+    <div className="break-inside-avoid rounded-2xl border border-border bg-background p-5">
+      <h3 className="font-display text-xl font-semibold text-primary">{title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-foreground">{children}</p>
     </div>
   );
 }

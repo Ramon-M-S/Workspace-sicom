@@ -44,6 +44,8 @@
     --muted-foreground: 159 10.9% 36.1%; /* #52665F — Musgo */
     --accent: 38.8 64.7% 57.8%; /* #D9A84E — Latão */
     --accent-foreground: 167.6 37.7% 15.1%;
+    --brass: 41 66% 59%;
+    --brass-foreground: 164 31% 15%;
     --destructive: 0 44.5% 44.5%; /* #A43F3F */
     --destructive-foreground: 84 23.8% 95.9%;
     --border: 133.3 8.9% 80.2%; /* #C8D1CA — divisores sutis */
@@ -80,6 +82,8 @@
     --muted-foreground: 151.8 15.3% 78.2%; /* #BFD0C8 */
     --accent: 38.8 64.7% 57.8%; /* #D9A84E — Latão */
     --accent-foreground: 170.3 49.2% 12.4%;
+    --brass: 41 66% 59%;
+    --brass-foreground: 164 31% 15%;
     --destructive: 0 39.4% 47.3%; /* #A84949 */
     --destructive-foreground: 84 23.8% 95.9%;
     --border: 166.5 28.4% 21.4%; /* #27463F */
@@ -130,13 +134,13 @@
   min-height: 297mm;
   margin: 0 auto;
   padding: 20mm;
-  background-color: #f5f7f2;
+  background-color: hsl(var(--background));
   box-shadow: 0 0 10px rgb(0 0 0 / 10%);
 }
 
 @media print {
   body {
-    background-color: #f5f7f2 !important;
+    background-color: hsl(var(--background)) !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }

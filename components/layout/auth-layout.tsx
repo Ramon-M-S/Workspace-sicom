@@ -156,39 +156,39 @@ export function AuthLayout({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <main className="flex min-h-screen w-full bg-[#164E45]">
+    <main className="flex min-h-screen w-full bg-primary">
       {/* Coluna esquerda: proposta de valor + trilha ampla e fluida */}
-      <section className="relative hidden min-h-screen w-1/2 flex-col justify-between overflow-hidden bg-[#F5F7F2] px-8 py-6 text-[#18352F] lg:flex xl:px-12 xl:py-8">
+      <section className="relative hidden min-h-screen w-1/2 flex-col justify-between overflow-hidden bg-background px-8 py-6 text-foreground lg:flex xl:px-12 xl:py-8">
         {/* Elementos decorativos e malha editorial subtil */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 opacity-[0.28]"
           style={{
             backgroundImage:
-              "radial-gradient(#164E45 0.75px, transparent 0.75px)",
+              "radial-gradient(hsl(var(--primary)) 0.75px, transparent 0.75px)",
             backgroundSize: "24px 24px",
           }}
         />
-        <div className="pointer-events-none absolute -left-24 -top-24 size-80 rounded-full bg-[#D9A84E]/15 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-32 -right-20 size-96 rounded-full bg-[#164E45]/[0.09] blur-3xl" />
-        <div className="pointer-events-none absolute right-[8%] top-[10%] size-28 rounded-full border border-[#164E45]/15" />
+        <div className="pointer-events-none absolute -left-24 -top-24 size-80 rounded-full bg-brass/15 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-32 -right-20 size-96 rounded-full bg-primary/[0.09] blur-3xl" />
+        <div className="pointer-events-none absolute right-[8%] top-[10%] size-28 rounded-full border border-primary/15" />
 
         {/* Cabeçalho editorial */}
         <div className="relative z-10 max-w-xl">
           <div className="mb-3 flex items-center gap-3">
             <Logo size={40} decorative />
-            <span className="font-display text-2xl font-semibold text-[#164E45]">
+            <span className="font-display text-2xl font-semibold text-primary">
               Prumo
             </span>
           </div>
 
-          <h1 className="max-w-lg font-display text-3xl font-semibold leading-[1.12] text-[#164E45] xl:text-[42px]">
+          <h1 className="max-w-lg font-display text-3xl font-semibold leading-[1.12] text-primary xl:text-[42px]">
             Um passo de cada vez.
             <br />
             Um TCC no seu ritmo.
           </h1>
 
-          <p className="mt-2.5 max-w-md text-sm leading-relaxed text-[#52665F] xl:text-base">
+          <p className="mt-2.5 max-w-md text-sm leading-relaxed text-muted-foreground xl:text-base">
             O caminho fica mais claro quando você não precisa carregar tudo na cabeça.
           </p>
         </div>
@@ -270,7 +270,7 @@ export function AuthLayout({ children }: { children: ReactNode }) {
               ref={pathRef}
               d={TRILHA_PATH_D}
               fill="none"
-              stroke="#164E45"
+              stroke="hsl(var(--primary))"
               strokeWidth="12"
               strokeLinecap="round"
               className="prumo-trilha-desenho"
@@ -281,11 +281,11 @@ export function AuthLayout({ children }: { children: ReactNode }) {
               <g
                 transform={`translate(${pontaPrumo.x}, ${pontaPrumo.y}) rotate(${pontaPrumo.angulo})`}
               >
-                <circle cx="-12" cy="-1" r="4" fill="#164E45" />
+                <circle cx="-12" cy="-1" r="4" fill="hsl(var(--primary))" />
                 <polygon
                   points="-16,-20 42,0 -16,18"
-                  fill="#EAB34B"
-                  stroke="#164E45"
+                  fill="hsl(var(--brass))"
+                  stroke="hsl(var(--primary))"
                   strokeWidth="2.5"
                   strokeLinejoin="round"
                 />
@@ -300,7 +300,7 @@ export function AuthLayout({ children }: { children: ReactNode }) {
                   <path
                     d={etapa.conector}
                     fill="none"
-                    stroke="#D9A84E"
+                    stroke="hsl(var(--brass))"
                     strokeWidth="2"
                     strokeDasharray="4 4"
                     opacity="0.75"
@@ -315,15 +315,15 @@ export function AuthLayout({ children }: { children: ReactNode }) {
                       cx={etapa.x}
                       cy={etapa.y}
                       r="18"
-                      fill="#EAB34B"
+                      fill="hsl(var(--brass))"
                       fillOpacity="0.18"
                     />
                     <circle
                       cx={etapa.x}
                       cy={etapa.y}
                       r="13"
-                      fill="#EAB34B"
-                      stroke="#164E45"
+                      fill="hsl(var(--brass))"
+                      stroke="hsl(var(--primary))"
                       strokeWidth="2"
                     />
                   </g>
@@ -335,7 +335,7 @@ export function AuthLayout({ children }: { children: ReactNode }) {
                       x={etapa.x + (textoNaEsquerda ? -24 : 24)}
                       y={etapa.y - 2}
                       textAnchor={textoNaEsquerda ? "end" : "start"}
-                      fill="#164E45"
+                      fill="hsl(var(--primary))"
                       fontFamily="var(--font-source-sans-3), Arial, sans-serif"
                       fontSize="19"
                       fontWeight="700"
@@ -346,7 +346,7 @@ export function AuthLayout({ children }: { children: ReactNode }) {
                       x={etapa.x + (textoNaEsquerda ? -24 : 24)}
                       y={etapa.y + 19}
                       textAnchor={textoNaEsquerda ? "end" : "start"}
-                      fill="#52665F"
+                      fill="hsl(var(--muted-foreground))"
                       fontFamily="var(--font-source-sans-3), Arial, sans-serif"
                       fontSize="14"
                       fontWeight="500"
@@ -361,13 +361,13 @@ export function AuthLayout({ children }: { children: ReactNode }) {
         </div>
 
         {/* Rodapé editorial */}
-        <p className="relative z-10 text-sm text-[#52665F]">
+        <p className="relative z-10 text-sm text-muted-foreground">
           Respire. O próximo passo está mais perto do que parece.
         </p>
       </section>
 
       {/* Coluna direita: área do formulário (ex.: card "Entrar no Prumo") */}
-      <section className="flex w-full items-center justify-center bg-[#164E45] p-4 sm:p-8 lg:w-1/2">
+      <section className="flex w-full items-center justify-center bg-primary p-4 sm:p-8 lg:w-1/2">
         {children}
       </section>
     </main>

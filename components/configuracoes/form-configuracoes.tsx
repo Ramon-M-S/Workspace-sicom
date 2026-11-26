@@ -54,9 +54,11 @@ export function FormConfiguracoes({ configuracao, etapas, anotacoes }: Props) {
   const [emailLembrete, setEmailLembrete] = useState(configuracao.emailLembrete ?? "");
   const [ativoLembretes, setAtivoLembretes] = useState(configuracao.ativoLembretes);
   const [diasAntecedencia, setDiasAntecedencia] = useState(String(configuracao.diasAntecedencia));
+  const [erros, setErros] = useState<Record<string, string>>({});
 
   async function salvar(event: FormEvent<HTMLFormElement>, dados: Record<string, unknown>, sucesso: string) {
     event.preventDefault();
+    setErros({});
     setSalvando(true);
     try {
       const resposta = await fetch("/api/configuracoes", {
@@ -66,12 +68,19 @@ export function FormConfiguracoes({ configuracao, etapas, anotacoes }: Props) {
       });
       const resultado = await resposta.json();
       if (!resposta.ok) {
-        throw new Error(resultado.error ?? "Não foi possível salvar as configurações.");
+        const fieldErrors = resultado?.details?.fieldErrors;
+        if (fieldErrors && typeof fieldErrors === "object") {
+          setErros(Object.fromEntries(Object.entries(fieldErrors).map(([key, value]) => [key, Array.isArray(value) ? String(value[0] ?? "Revise este campo.") : "Revise este campo."])));
+          if (Object.keys(fieldErrors).length > 0) {
+            throw new Error("Revise os campos destacados e tente de novo.");
+          }
+        }
+        throw new Error("Não conseguimos salvar as configurações. Tente de novo.");
       }
       toast.success(sucesso);
       router.refresh();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Erro ao salvar as configurações.");
+      toast.error(error instanceof Error && error.message.startsWith("Revise") ? error.message : "Não conseguimos salvar as configurações. Tente de novo.");
     } finally {
       setSalvando(false);
     }
@@ -81,15 +90,14 @@ export function FormConfiguracoes({ configuracao, etapas, anotacoes }: Props) {
     setRestaurando(true);
     try {
       const resposta = await fetch("/api/configuracoes/seed", { method: "POST" });
-      const resultado = await resposta.json();
       if (!resposta.ok) {
-        throw new Error(resultado.erro ?? "Não foi possível restaurar os dados.");
+        throw new Error("Não conseguimos restaurar os dados. Tente de novo.");
       }
       setDialogAberto(false);
       toast.success("Perfil restaurado com sucesso.");
       router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Erro ao restaurar os dados.");
+    } catch {
+      toast.error("Não conseguimos restaurar os dados. Tente de novo.");
     } finally {
       setRestaurando(false);
     }
@@ -112,16 +120,19 @@ export function FormConfiguracoes({ configuracao, etapas, anotacoes }: Props) {
           >
             <div className="space-y-2">
               <Label htmlFor="nomeProjeto">Nome do Projeto</Label>
-              <Input id="nomeProjeto" required minLength={3} value={nomeProjeto} onChange={(event) => setNomeProjeto(event.target.value)} />
+              <Input id="nomeProjeto" required minLength={3} value={nomeProjeto} onChange={(event) => setNomeProjeto(event.target.value)} aria-invalid={!!erros.nomeProjeto} aria-describedby={erros.nomeProjeto ? "nomeProjeto-erro" : undefined} />
+              {erros.nomeProjeto && <p id="nomeProjeto-erro" role="alert" className="text-sm text-destructive">Informe um nome com pelo menos 3 caracteres.</p>}
             </div>
             <div className="grid gap-5 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="dataInicio">Data de Início</Label>
-                <Input id="dataInicio" type="date" required value={dataInicio} onChange={(event) => setDataInicio(event.target.value)} />
+                <Input id="dataInicio" type="date" required value={dataInicio} onChange={(event) => setDataInicio(event.target.value)} aria-invalid={!!erros.dataInicio} aria-describedby={erros.dataInicio ? "dataInicio-erro" : undefined} />
+                {erros.dataInicio && <p id="dataInicio-erro" role="alert" className="text-sm text-destructive">Informe uma data de início válida.</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="dataDefesa">Data da Defesa</Label>
-                <Input id="dataDefesa" type="date" value={dataDefesa} onChange={(event) => setDataDefesa(event.target.value)} />
+                <Input id="dataDefesa" type="date" value={dataDefesa} onChange={(event) => setDataDefesa(event.target.value)} aria-invalid={!!erros.dataDefesa} aria-describedby={erros.dataDefesa ? "dataDefesa-erro" : undefined} />
+                {erros.dataDefesa && <p id="dataDefesa-erro" role="alert" className="text-sm text-destructive">Informe uma data de defesa válida.</p>}
               </div>
             </div>
             <Button type="submit" disabled={salvando}>
@@ -148,7 +159,7 @@ export function FormConfiguracoes({ configuracao, etapas, anotacoes }: Props) {
           >
             <div className="flex items-center justify-between gap-4 rounded-lg border p-4">
               <div className="space-y-1">
-                <Label htmlFor="ativoLembretes" className="cursor-pointer">Ativar lembretes automáticos</Label>
+                <span id="ativoLembretes-label" className="cursor-pointer text-sm font-medium">Ativar lembretes automáticos</span>
                 <p className="text-sm text-muted-foreground">Permite o envio automático de e-mails sobre os prazos.</p>
               </div>
               <button
@@ -156,7 +167,7 @@ export function FormConfiguracoes({ configuracao, etapas, anotacoes }: Props) {
                 type="button"
                 role="switch"
                 aria-checked={ativoLembretes}
-                aria-label="Ativar lembretes automáticos"
+                aria-labelledby="ativoLembretes-label"
                 onClick={() => setAtivoLembretes((ativo) => !ativo)}
                 className={`relative h-6 w-11 shrink-0 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${ativoLembretes ? "bg-primary" : "bg-muted-foreground/40"}`}
               >
@@ -168,12 +179,14 @@ export function FormConfiguracoes({ configuracao, etapas, anotacoes }: Props) {
                 <Label htmlFor="emailLembrete">E-mail para lembretes</Label>
                 <div className="relative">
                   <Mail className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input id="emailLembrete" type="email" className="pl-9" placeholder="voce@exemplo.com" value={emailLembrete} onChange={(event) => setEmailLembrete(event.target.value)} />
+                  <Input id="emailLembrete" type="email" className="pl-9" placeholder="voce@exemplo.com" value={emailLembrete} onChange={(event) => setEmailLembrete(event.target.value)} aria-invalid={!!erros.emailLembrete} aria-describedby={erros.emailLembrete ? "emailLembrete-erro" : undefined} />
                 </div>
+                {erros.emailLembrete && <p id="emailLembrete-erro" role="alert" className="text-sm text-destructive">Informe um e-mail válido.</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="diasAntecedencia">Dias de antecedência</Label>
-                <Input id="diasAntecedencia" type="number" min={1} max={30} required value={diasAntecedencia} onChange={(event) => setDiasAntecedencia(event.target.value)} />
+                <Input id="diasAntecedencia" type="number" min={1} max={30} required value={diasAntecedencia} onChange={(event) => setDiasAntecedencia(event.target.value)} aria-invalid={!!erros.diasAntecedencia} aria-describedby={erros.diasAntecedencia ? "diasAntecedencia-erro" : undefined} />
+                {erros.diasAntecedencia && <p id="diasAntecedencia-erro" role="alert" className="text-sm text-destructive">Informe um número entre 1 e 30.</p>}
                 <p className="text-xs text-muted-foreground">Você pode ajustar para 7, 3 ou 1 dia, por exemplo.</p>
               </div>
             </div>

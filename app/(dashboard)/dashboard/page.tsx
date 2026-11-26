@@ -19,8 +19,8 @@ function formatarData(data: string) {
   return format(new Date(`${data.slice(0, 10)}T12:00:00`), "dd/MM/yyyy", { locale: ptBR });
 }
 
-function textoDias(dias: number) {
-  if (dias < 0) return `Atrasada há ${Math.abs(dias)} ${Math.abs(dias) === 1 ? "dia" : "dias"}`;
+function textoDias(dias: number, fim?: string) {
+  if (dias < 0) return `Pendente desde ${fim ? formatarData(fim) : "a data prevista"}`;
   if (dias === 0) return "Vence hoje";
   return `Faltam ${dias} ${dias === 1 ? "dia" : "dias"}`;
 }
@@ -137,7 +137,7 @@ export default async function DashboardPage() {
 
         <Card className="flex h-[120px] flex-col">
           <CardHeader className="p-3 pb-0">
-            <CardTitle className="text-sm font-normal text-muted-foreground">Atrasadas</CardTitle>
+            <CardTitle className="text-sm font-normal text-muted-foreground">Pendentes após a data prevista</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-1 flex-col items-center justify-center p-2 pt-0">
             <p
@@ -162,7 +162,7 @@ export default async function DashboardPage() {
                   <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                     <span>{dados.proximaEtapa.faseNome}</span>
                     <span aria-hidden="true">·</span>
-                    <span>{textoDias(dados.proximaEtapa.diasRestantes)}</span>
+                    <span>{textoDias(dados.proximaEtapa.diasRestantes, dados.proximaEtapa.fim)}</span>
                     <span aria-hidden="true">·</span>
                     <span>Até {formatarData(dados.proximaEtapa.fim)}</span>
                   </div>
@@ -215,7 +215,7 @@ export default async function DashboardPage() {
                         {etapa.titulo}
                       </Link>
                       <p className="text-sm text-muted-foreground">
-                        {textoDias(etapa.diasRestantes)} · até {formatarData(etapa.fim)}
+                        {textoDias(etapa.diasRestantes, etapa.fim)} · até {formatarData(etapa.fim)}
                       </p>
                     </div>
                     <div className="flex gap-2">

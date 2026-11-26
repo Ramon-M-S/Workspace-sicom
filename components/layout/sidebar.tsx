@@ -41,7 +41,7 @@ function SidebarContents({
     <>
       <div
         className={cn(
-          "flex h-14 shrink-0 items-center border-b border-border/50 dark:border-[#0B4535]",
+          "flex h-14 shrink-0 items-center border-b border-border/50 dark:border-border",
           isCollapsed ? "flex justify-center px-2" : "px-6",
         )}
       >
@@ -54,7 +54,7 @@ function SidebarContents({
           {isCollapsed ? (
             <Logo size={32} />
           ) : (
-            <span className="text-lg font-semibold tracking-tight text-[#164E45] dark:text-[#F5F7F2]">
+            <span className="text-lg font-semibold tracking-tight text-primary dark:text-background">
               Prumo
             </span>
           )}
@@ -76,8 +76,8 @@ function SidebarContents({
                 "flex items-center rounded-md py-2 text-sm",
                 isCollapsed ? "justify-center px-0" : "gap-3 px-3",
                 ativo
-                  ? "bg-[#164E45]/10 font-medium text-[#164E45] dark:bg-[#F5F7F2]/10 dark:text-[#F5F7F2]"
-                  : "text-[#52665F] hover:bg-[#164E45]/5 dark:text-[#F5F7F2]/70 dark:hover:bg-[#F5F7F2]/10",
+                  ? "bg-primary/10 font-medium text-primary dark:bg-background/10 dark:text-background"
+                  : "text-muted-foreground hover:bg-primary/5 dark:text-background/70 dark:hover:bg-background/10",
               )}
             >
               <Icon className="h-4 w-4" />
@@ -108,18 +108,18 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "hidden h-screen shrink-0 flex-col border-r border-border/50 bg-[#F5F7F2] text-foreground transition-all duration-300 dark:border-[#0B4535] dark:bg-[#164E45] dark:text-[#F5F7F2] md:flex",
+        "hidden h-screen shrink-0 flex-col border-r border-border/50 bg-background text-foreground transition-all duration-300 dark:border-border dark:bg-primary dark:text-background md:flex",
         collapsed ? "w-16" : "w-64",
       )}
     >
       <SidebarContents isCollapsed={collapsed} />
-      <div className="mt-auto border-t border-border/50 p-4 dark:border-[#0B4535]">
+      <div className="mt-auto border-t border-border/50 p-4 dark:border-border">
         <Button
           type="button"
           variant="ghost"
           size={collapsed ? "icon" : "default"}
           className={cn(
-            "w-full text-[#52665F] hover:bg-[#164E45]/5 dark:text-[#F5F7F2]/70 dark:hover:bg-[#F5F7F2]/10",
+            "w-full text-muted-foreground hover:bg-primary/5 dark:text-background/70 dark:hover:bg-background/10",
             collapsed ? "px-0" : "justify-start",
           )}
           aria-label={collapsed ? "Expandir sidebar" : "Recolher sidebar"}
@@ -140,7 +140,7 @@ export function Sidebar() {
 
 export function SidebarMobile({ onNavigate }: { onNavigate?: () => void }) {
   return (
-    <div className="flex h-full flex-col bg-[#F5F7F2] text-foreground dark:bg-[#164E45] dark:text-[#F5F7F2]">
+    <div className="flex h-full flex-col bg-background text-foreground dark:bg-primary dark:text-background">
       <SidebarContents onNavigate={onNavigate} />
     </div>
   );

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { differenceInCalendarDays, startOfDay } from "date-fns";
-import { AlertCircle, Bell, Check, Clock3 } from "lucide-react";
+import { Bell, Check, Clock3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -16,7 +16,7 @@ type Notificacao = {
 };
 
 type DadosNotificacoes = {
-  total: number;
+      total: number;
   atrasadas: number;
   proximas: number;
   lista: Notificacao[];
@@ -68,7 +68,7 @@ export function Notificacoes() {
       >
         <Bell className="h-5 w-5" />
         {!!dados?.total && (
-          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-semibold leading-none text-white">
+          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold leading-none text-primary-foreground">
             {dados.total > 9 ? "9+" : dados.total}
           </span>
         )}
@@ -88,7 +88,7 @@ export function Notificacoes() {
             </p>
           ) : dados.lista.length === 0 ? (
             <div className="flex items-center justify-center gap-2 px-4 py-8 text-sm text-muted-foreground">
-              <Check className="h-4 w-4 text-green-600" />
+              <Check className="h-4 w-4 text-primary" />
               Tudo em dia!
             </div>
           ) : (
@@ -109,9 +109,9 @@ export function Notificacoes() {
                         className="flex gap-3 px-4 py-3 transition-colors hover:bg-muted/50"
                       >
                         {atrasada ? (
-                          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" />
+                          <Clock3 className="mt-0.5 h-4 w-4 shrink-0 text-brass-foreground" />
                         ) : (
-                          <Clock3 className="mt-0.5 h-4 w-4 shrink-0 text-orange-500" />
+                          <Clock3 className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
                         )}
                         <span className="min-w-0 flex-1">
                           <span className="block truncate text-sm font-medium text-foreground">
@@ -119,11 +119,11 @@ export function Notificacoes() {
                           </span>
                           <span
                             className={`mt-0.5 block text-xs ${
-                              atrasada ? "text-red-600" : "text-orange-600"
+                              "text-muted-foreground"
                             }`}
                           >
                             {atrasada
-                              ? "Atrasada"
+                              ? `Pendente desde ${new Date(etapa.fim).toLocaleDateString("pt-BR")}`
                               : `Vence em ${diasRestantes} ${diasRestantes === 1 ? "dia" : "dias"}`}
                           </span>
                         </span>

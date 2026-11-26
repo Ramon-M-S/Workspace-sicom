@@ -41,10 +41,10 @@ function dataCalendario(data: Date | string) {
 }
 
 function corStatus(status: string, fim: Date, hoje: Date) {
-  if (status === "concluida") return "bg-green-600";
-  if (status === "em_andamento") return "bg-blue-600";
-  if (fim < hoje) return "bg-red-600";
-  return "bg-gray-400";
+  if (status === "concluida") return "bg-primary/60";
+  if (status === "em_andamento") return "bg-primary";
+  if (fim < hoje) return "bg-brass/60";
+  return "bg-muted-foreground/40";
 }
 
 function intervaloFase(fase: Fase) {
@@ -125,7 +125,7 @@ export function GanttInterativo({ fases, dataInicio, dataFim, totalDias }: Props
 
         {posicaoHoje !== null && (
           <div
-            className="pointer-events-none absolute bottom-0 top-11 z-10 w-0.5 bg-red-500"
+            className="pointer-events-none absolute bottom-0 top-11 z-10 w-0.5 bg-brass"
             style={{ left: LARGURA_COLUNA_FASE + posicaoHoje }}
             title="Hoje"
             aria-label="Hoje"

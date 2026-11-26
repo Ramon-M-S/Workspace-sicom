@@ -46,8 +46,8 @@ export function NovaFaseDialog() {
       setAberto(false);
       router.refresh();
       toast.success("Fase criada!");
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Não foi possível criar a fase.");
+    } catch {
+      toast.error("Não conseguimos criar a fase. Tente de novo.");
     } finally {
       setSalvando(false);
     }

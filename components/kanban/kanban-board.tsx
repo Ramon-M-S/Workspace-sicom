@@ -60,7 +60,7 @@ export function KanbanBoard({ dados }: { dados: DadosKanban }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: destino }),
       });
-      if (!resposta.ok) throw new Error("Falha ao atualizar status da etapa");
+      if (!resposta.ok) throw new Error("Não conseguimos atualizar essa etapa. Tente novamente.");
     } catch {
       setEtapas(anterior);
     }
@@ -84,13 +84,13 @@ export function KanbanBoard({ dados }: { dados: DadosKanban }) {
                   {etapas[coluna.id].map((etapa, indice) => {
                     const fim = dataCalendario(etapa.fim);
                     const diasRestantes = differenceInCalendarDays(fim, dataCalendario(new Date()));
-                    const urgente = etapa.status !== "concluida" && diasRestantes <= 14;
+                    const prazoProximo = etapa.status !== "concluida" && diasRestantes <= 14;
                     const corUrgencia = etapa.status === "concluida"
                       ? "bg-muted"
                       : diasRestantes < 0
-                        ? "bg-red-500"
-                        : urgente
-                          ? "bg-amber-500"
+                        ? "bg-brass/15"
+                        : prazoProximo
+                          ? "bg-brass/15"
                           : "bg-muted";
 
                     return (
@@ -106,13 +106,13 @@ export function KanbanBoard({ dados }: { dados: DadosKanban }) {
                               <p className="text-sm font-medium">{etapa.titulo}</p>
                               <span
                                 className={`mt-1 h-2.5 w-2.5 shrink-0 rounded-full ${corUrgencia}`}
-                                aria-label={diasRestantes < 0 ? "Prazo vencido" : urgente ? "Prazo próximo" : "Prazo futuro"}
-                                title={diasRestantes < 0 ? "Prazo vencido" : urgente ? "Prazo próximo" : "Prazo futuro"}
+                                aria-label={diasRestantes < 0 ? `Pendente desde ${format(fim, "dd/MM")}` : prazoProximo ? "Prazo próximo" : "Prazo futuro"}
+                                title={diasRestantes < 0 ? `Pendente desde ${format(fim, "dd/MM")}` : prazoProximo ? "Prazo próximo" : "Prazo futuro"}
                               />
                             </div>
                             <p className="mt-2 text-xs text-muted-foreground">{etapa.fase.nome}</p>
                             <p className="mt-1 text-xs text-muted-foreground">
-                              Data de fim: {format(fim, "dd/MM/yyyy")}
+                              {diasRestantes < 0 ? "Pendente desde" : "Data de fim:"} {format(fim, "dd/MM/yyyy")}
                             </p>
                           </article>
                         )}

@@ -60,7 +60,7 @@ export function FormImportar() {
     try {
       cronograma = JSON.parse(script);
     } catch {
-      toast.error("O texto não é um JSON válido. Confira a sintaxe e tente novamente.");
+      toast.error("Não conseguimos ler esse conteúdo. Confira o formato e tente de novo.");
       return;
     }
 
@@ -88,8 +88,8 @@ export function FormImportar() {
       );
       router.push("/etapas");
       router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Não foi possível importar o cronograma.");
+    } catch {
+      toast.error("Não conseguimos importar o cronograma. Tente de novo.");
     } finally {
       setProcessando(false);
     }

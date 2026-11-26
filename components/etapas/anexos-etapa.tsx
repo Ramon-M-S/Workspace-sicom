@@ -57,8 +57,8 @@ export function AnexosEtapa({ etapa }: { etapa: EtapaComAnexos }) {
       setArquivos((atuais) => [novoAnexo, ...atuais]);
       toast.success("Arquivo anexado com sucesso.");
       router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Erro ao anexar arquivo.");
+    } catch {
+      toast.error("Não conseguimos anexar o arquivo. Tente de novo.");
     } finally {
       setEnviando(false);
     }
@@ -74,8 +74,8 @@ export function AnexosEtapa({ etapa }: { etapa: EtapaComAnexos }) {
       setAnexoParaExcluir(null);
       toast.success("Anexo excluído.");
       router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Erro ao excluir anexo.");
+    } catch {
+      toast.error("Não conseguimos excluir o anexo. Tente de novo.");
     } finally {
       setEnviando(false);
     }

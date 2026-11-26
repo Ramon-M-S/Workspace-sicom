@@ -87,8 +87,8 @@ function labelStatus(status: string) {
 }
 
 function classesStatus(status: string) {
-  if (status === "em_andamento") return "bg-blue-100 text-blue-800 hover:bg-blue-100";
-  if (status === "concluida") return "bg-green-100 text-green-800 hover:bg-green-100";
+  if (status === "em_andamento") return "bg-primary/10 text-primary hover:bg-primary/10";
+  if (status === "concluida") return "bg-primary/10 text-primary hover:bg-primary/10";
   return "bg-muted text-muted-foreground";
 }
 
@@ -115,8 +115,8 @@ export function DetalheEtapa({ etapa }: { etapa: EtapaDetalhe }) {
       if (dados.progresso !== undefined) setProgresso(dados.progresso);
       toast.success("Etapa atualizada com sucesso.");
       router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Erro ao atualizar etapa.");
+    } catch {
+      toast.error("Não conseguimos atualizar essa etapa. Tente de novo.");
     } finally {
       setSalvando(false);
     }
@@ -132,8 +132,8 @@ export function DetalheEtapa({ etapa }: { etapa: EtapaDetalhe }) {
       setNovaAnotacao("");
       toast.success("Anotação adicionada.");
       router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Erro ao adicionar anotação.");
+    } catch {
+      toast.error("Não conseguimos adicionar a anotação. Tente de novo.");
     } finally {
       setSalvando(false);
     }
@@ -149,8 +149,8 @@ export function DetalheEtapa({ etapa }: { etapa: EtapaDetalhe }) {
       setTextoEdicao("");
       toast.success("Anotação atualizada.");
       router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Erro ao atualizar anotação.");
+    } catch {
+      toast.error("Não conseguimos atualizar a anotação. Tente de novo.");
     } finally {
       setSalvando(false);
     }
@@ -164,8 +164,8 @@ export function DetalheEtapa({ etapa }: { etapa: EtapaDetalhe }) {
       setAnotacaoParaExcluir(null);
       toast.success("Anotação excluída.");
       router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Erro ao excluir anotação.");
+    } catch {
+      toast.error("Não conseguimos excluir a anotação. Tente de novo.");
     } finally {
       setSalvando(false);
     }
@@ -178,7 +178,7 @@ export function DetalheEtapa({ etapa }: { etapa: EtapaDetalhe }) {
       toast.success("Etapa excluída.");
       router.push("/etapas");
     } catch {
-      toast.error("Erro ao excluir etapa.");
+      toast.error("Não conseguimos excluir a etapa. Tente de novo.");
     } finally {
       setSalvando(false);
     }

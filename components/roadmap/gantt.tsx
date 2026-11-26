@@ -41,15 +41,15 @@ function formatarPeriodo(inicio: Date | string, fim: Date | string) {
 function labelStatus(status: string) {
   if (status === "em_andamento") return "Em andamento";
   if (status === "concluida") return "Concluída";
-  if (status === "atrasada") return "Atrasada";
+  if (status === "atrasada") return "Pendente após a data prevista";
   return "Pendente";
 }
 
 function corStatus(status: string) {
-  if (status === "em_andamento") return "bg-blue-600";
-  if (status === "concluida") return "bg-green-600";
-  if (status === "atrasada") return "bg-red-600";
-  return "bg-gray-400";
+  if (status === "em_andamento") return "bg-primary";
+  if (status === "concluida") return "bg-primary/60";
+  if (status === "atrasada") return "bg-brass/60";
+  return "bg-muted-foreground/40";
 }
 
 export function Gantt({ etapas, dataInicio, dataFim, totalDias }: Props) {
@@ -159,7 +159,7 @@ export function Gantt({ etapas, dataInicio, dataFim, totalDias }: Props) {
           >
             {posicaoHoje !== null && (
               <div
-                className="absolute bottom-0 top-0 w-0.5 bg-red-500"
+                className="absolute bottom-0 top-0 w-0.5 bg-brass"
                 style={{ left: `${posicaoHoje}%` }}
                 title="Hoje"
               />
@@ -196,7 +196,7 @@ export function Gantt({ etapas, dataInicio, dataFim, totalDias }: Props) {
                       title={tooltip}
                       aria-label={tooltip}
                     >
-                      <span className="truncate px-2 text-xs font-medium text-white">
+                      <span className="truncate px-2 text-xs font-medium text-primary-foreground">
                         {etapa.titulo}
                       </span>
                     </div>

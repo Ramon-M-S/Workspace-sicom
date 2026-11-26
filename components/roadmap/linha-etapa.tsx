@@ -21,7 +21,7 @@ function dataCalendario(data: Date | string) {
 function labelStatus(status: string) {
   if (status === "em_andamento") return "Em andamento";
   if (status === "concluida") return "Concluída";
-  if (status === "atrasada") return "Atrasada";
+  if (status === "atrasada") return "Pendente";
   return "Pendente";
 }
 
@@ -36,17 +36,17 @@ export function LinhaEtapa({ etapa }: { etapa: EtapaLinha }) {
     etapa.status === "concluida"
       ? "bg-muted"
       : diasRestantes < 0
-        ? "bg-red-500"
+        ? "bg-brass/15"
         : diasRestantes <= 7
-          ? "bg-amber-500"
+          ? "bg-brass/15"
           : "bg-muted";
   const corBadge =
     statusVisual === "atrasada"
-      ? "bg-red-100 text-red-800 hover:bg-red-100"
+      ? "bg-brass/15 text-foreground hover:bg-brass/15"
       : statusVisual === "em_andamento"
-        ? "bg-blue-100 text-blue-800 hover:bg-blue-100"
+        ? "bg-primary/10 text-primary hover:bg-primary/10"
         : statusVisual === "concluida"
-          ? "bg-green-100 text-green-800 hover:bg-green-100"
+          ? "bg-primary/10 text-primary hover:bg-primary/10"
           : "bg-muted text-muted-foreground";
   const varianteBadge =
     statusVisual === "concluida" ? "secondary" : statusVisual === "em_andamento" ? "default" : "outline";
@@ -59,15 +59,15 @@ export function LinhaEtapa({ etapa }: { etapa: EtapaLinha }) {
       <div className="shrink-0">
         <div
           className={`h-3 w-3 rounded-full ${corUrgencia}`}
-          aria-label={atrasada ? "Etapa atrasada" : diasRestantes <= 7 ? "Prazo próximo" : "Prazo futuro"}
-          title={atrasada ? "Etapa atrasada" : diasRestantes <= 7 ? "Prazo próximo" : "Prazo futuro"}
+          aria-label={atrasada ? `Pendente desde ${format(fim, "dd/MM")}` : diasRestantes <= 7 ? "Prazo próximo" : "Prazo futuro"}
+          title={atrasada ? `Pendente desde ${format(fim, "dd/MM")}` : diasRestantes <= 7 ? "Prazo próximo" : "Prazo futuro"}
         />
       </div>
 
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium">{etapa.titulo}</p>
         <p className="text-xs text-muted-foreground">
-          Vence em {format(fim, "dd/MM/yyyy")} ({diasRestantes} {diasRestantes === 1 || diasRestantes === -1 ? "dia" : "dias"})
+          {atrasada ? `Pendente desde ${format(fim, "dd/MM/yyyy")}` : `Vence em ${format(fim, "dd/MM/yyyy")} (${diasRestantes} ${diasRestantes === 1 ? "dia" : "dias"})`}
         </p>
       </div>
 

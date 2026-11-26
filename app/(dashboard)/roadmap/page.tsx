@@ -1,7 +1,7 @@
 import { differenceInCalendarDays, format, startOfDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import Link from "next/link";
-import { AlertCircle, ArrowRight, Calendar } from "lucide-react";
+import { ArrowRight, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { GanttInterativo } from "@/components/roadmap/gantt-interativo";
@@ -21,7 +21,7 @@ export default async function Page() {
       <div>
         <h1 className="text-2xl font-semibold">Roadmap do TCC</h1>
         <p className="text-sm text-muted-foreground">
-          Visão geral do cronograma, das fases e dos prazos que exigem atenção.
+          Visão geral do cronograma, das fases e dos próximos passos.
         </p>
       </div>
 
@@ -35,8 +35,8 @@ export default async function Page() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 text-red-500" aria-hidden="true" />
-            <span>Atenção Imediata (Próximos 14 dias)</span>
+            <Calendar className="h-5 w-5 text-brass-foreground" aria-hidden="true" />
+            <span>Prazos próximos e etapas para retomar</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -52,7 +52,7 @@ export default async function Page() {
                 return (
                   <Card
                     key={etapa.id}
-                    className={`border-l-4 ${atrasada ? "border-l-red-500" : "border-l-amber-500"}`}
+                    className={`border-l-4 ${atrasada ? "border-l-brass" : "border-l-brass"}`}
                   >
                     <CardContent className="flex h-full flex-col gap-3 py-4">
                       <p className="text-xs uppercase text-muted-foreground">
@@ -64,9 +64,9 @@ export default async function Page() {
                         Vence em {format(fim, "dd/MM/yyyy", { locale: ptBR })}
                       </p>
                       <div className="mt-auto flex items-end justify-between gap-3 pt-1">
-                        <p className={`text-sm ${atrasada ? "text-red-600" : "text-orange-600"}`}>
+                        <p className="text-sm text-muted-foreground">
                           {atrasada
-                            ? `Atrasada há ${Math.abs(diasRestantes)} ${Math.abs(diasRestantes) === 1 ? "dia" : "dias"}`
+                            ? `Pendente desde ${format(fim, "dd/MM/yyyy", { locale: ptBR })}`
                             : `Faltam ${diasRestantes} ${diasRestantes === 1 ? "dia" : "dias"}`}
                         </p>
                         <Button asChild variant="outline" size="sm">

@@ -1,181 +1,130 @@
-# SICOM — Sistema de Gestão de TCC
+# Prumo
 
-> **Trabalho de Conclusão de Curso (TCC)** — Sistemas de Informação, IFMA  
-> **Tema:** Plataforma de comunicação operacional para a Guarda Municipal de São Luís  
-> **Status:** MVP Concluído e Funcional
+Prumo é uma plataforma para apoiar o desenvolvimento de Trabalhos de
+Conclusão de Curso (TCC), reunindo acompanhamento de etapas e prazos,
+documentação do projeto e recursos de colaboração. O módulo de TCC usa Next.js
+14 (App Router), TypeScript, PostgreSQL e Prisma.
 
----
+## Módulo de TCC
 
-## 📋 Sobre o Projeto
+O módulo de TCC está sendo desenvolvido incrementalmente em 10 etapas. Sua
+arquitetura é declarativa e orientada a dados: modelos institucionais descrevem
+estrutura, formatação, seções e regras de composição como dados validados, em
+vez de embutir regras de uma instituição específica no código. Isso permite
+configurar diferentes modelos institucionais sem acoplamento rígido a um
+regulamento particular.
 
-O **SICOM** é uma plataforma completa para gestão do Trabalho de Conclusão de Curso. Ele permite organizar etapas, prazos, referências, anotações e anexos, além de automatizar lembretes por e-mail e integração com calendários.
+O modelo contempla projetos, autores, membros e papéis de acesso, seções,
+versões, comentários e arquivos. O conteúdo do editor é um documento JSON
+validado e versionado.
 
-A metodologia de desenvolvimento seguiu o **Spec-Driven Development (SDD)**, utilizando IA (Gemini Code Assist) e o GitHub Spec Kit para transformar intenção em especificações executáveis antes de codificar.
+### Segurança e integridade
 
----
+- A composição de modelos e a avaliação de condições usam estruturas
+  declarativas conhecidas; não executam expressões fornecidas como código e não
+  usam `eval` nem `new Function`.
+- A validação de JSON bloqueia as chaves `__proto__`, `prototype` e
+  `constructor`, acessores, protótipos personalizados, símbolos, referências
+  circulares e outros valores que não pertencem a JSON seguro.
+- Versões publicadas ou arquivadas são imutáveis. Projetos guardam snapshots
+  independentes do modelo institucional, preservando a definição utilizada
+  mesmo que o modelo original evolua.
+- `AutorTcc` representa a autoria acadêmica declarada no projeto;
+  `MembroProjetoTcc` representa um usuário da plataforma associado ao projeto e seu
+  papel de acesso. São relações diferentes e não devem ser confundidas.
+- Arquivos são registrados separadamente como `ArquivoTcc`. O documento do
+  editor contém referências por ID (`fileId` ou `attachmentId`), não os
+  arquivos em si.
 
-## ✨ Funcionalidades Principais
+### Etapas
 
-- **Dashboard:** Visão geral do progresso com gráficos (Recharts) e exportação de relatório em PDF.
-- **Lista de Etapas:** Filtros por fase, status e busca textual.
-- **Detalhe da Etapa:** Objetivo, entregáveis, Definition of Done (DoD), anotações, anexos (PDF/imagens), histórico de alterações e exportação para calendário.
-- **Roadmap:** Visualização em Gantt interativo com painel de urgências.
-- **Kanban:** Visão de quadro com drag & drop para atualização de status.
-- **Calendário:** Visão mensal dos prazos com sincronização.
-- **Configurações:** Perfil do projeto, automação de lembretes e restauração de dados de fábrica.
-- **Busca Global (Ctrl+K):** Paleta de comandos para encontrar etapas e anotações rapidamente.
-- **Notificações:** Sino no header com alertas de prazos próximos e atrasados.
-- **Modo Escuro:** Alternância entre tema claro e escuro com persistência.
-- **Lembretes por E-mail:** Envio automático de e-mails de aviso (Nodemailer).
-- **Integração com Calendário:** Geração de arquivos `.ics` e links diretos para o Google Agenda.
+- **Etapas 1 a 4:** concluídas e em commits.
+- **Etapa 5:** próxima etapa; ainda não iniciada.
+- **Etapas 6 a 10:** planejadas.
 
----
+O escopo atual permanece nas etapas concluídas; esta documentação não antecipa
+nem implementa o trabalho da Etapa 5.
 
-## 🚀 Inicialização Rápida (Setup Automatizado)
+## Requisitos
 
-A forma mais rápida de rodar o projeto é usando o script de setup. Ele sobe o Docker, instala dependências, roda migrations e popula o banco.
+- Node.js 20 ou superior e npm.
+- Docker e Docker Compose para executar o PostgreSQL local.
 
-### Pré-requisitos
-- Node.js 20+
-- Docker e Docker Compose
-- Git
-
-### Passo a passo
+## Desenvolvimento local
 
 ```bash
-# 1. Clone o repositório
-git clone https://github.com/seu-usuario/sicom-tcc.git
-cd sicom-tcc
-
-# 2. Rode o script de setup
-npm run setup
-# (ou: ./scripts/setup.sh)
-
-# 3. Edite o arquivo .env com suas credenciais (se ainda não existir)
-# (O script cria o .env a partir do .env.example se não existir)
-
-# 4. Inicie o servidor
+npm install
+cp .env.example .env
+docker compose up -d
+npx prisma generate
+npx prisma migrate deploy
+npx prisma db seed
 npm run dev
 ```
 
-Acesse: http://localhost:3000
+O servidor fica disponível em <http://localhost:3000>. Como alternativa, o
+script `npm run setup` automatiza a inicialização do banco, instalação de
+dependências, configuração inicial do `.env`, geração do cliente Prisma,
+migrations e seed. Revise e preencha as variáveis do `.env` antes de usar
+integrações externas.
 
-### O que o script de setup faz?
-1. Verifica se o Docker está rodando.
-2. Sobe o container PostgreSQL (`docker compose up -d`).
-3. Instala as dependências (`npm install`).
-4. Cria o `.env` a partir do `.env.example` (se necessário).
-5. Roda `prisma generate`, `prisma migrate deploy` e `prisma db seed`.
+## Variáveis de ambiente
 
----
+Configure-as no arquivo `.env` local. Não versione credenciais:
 
-## 🔐 Variáveis de Ambiente
+| Variável | Uso |
+| --- | --- |
+| `DATABASE_URL` | Conexão PostgreSQL usada pelo Prisma. |
+| `AUTH_SECRET` | Segredo da autenticação. Configure um valor forte e privado. |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` | Configuração do servidor de envio de e-mail. |
+| `LEMBRETE_EMAIL_DESTINO` | Destinatário configurado para lembretes. |
+| `CRON_SECRET` | Segredo usado para proteger a execução do cron de lembretes. |
+| `TCC_MODEL_MANAGER_IDS` | IDs de usuários autorizados a administrar modelos institucionais, separados por vírgula. Se estiver vazia ou ausente, ninguém recebe essa permissão (*deny-by-default*). |
 
-Crie o arquivo `.env` na raiz com as seguintes variáveis:
+Os valores de exemplo estão em [.env.example](./.env.example). Nunca use
+credenciais de exemplo em produção.
 
-```env
-# Banco de Dados
-DATABASE_URL="postgresql://sicom:sicom@localhost:5432/sicom_dev?schema=public"
-
-# SMTP (Ethereal para testes, Gmail para produção)
-SMTP_HOST="smtp.ethereal.email"
-SMTP_PORT="587"
-SMTP_USER="seu-usuario@ethereal.email"
-SMTP_PASS="sua-senha"
-SMTP_FROM="SICOM TCC <seu-usuario@ethereal.email>"
-LEMBRETE_EMAIL_DESTINO="seu-email@gmail.com"
-
-# Segurança do Cron
-CRON_SECRET="uma-senha-forte-aleatoria"
-```
-
-### Configurar o Ethereal (para testes)
-1. Acesse https://ethereal.email/
-2. Clique em **Create Ethereal Account**
-3. Copie as credenciais e cole no `.env`
-
----
-
-## 📁 Estrutura do Projeto
+## Estrutura relevante
 
 ```text
-sicom-tcc/
-├── app/                      # App Router do Next.js
-│   ├── (dashboard)/          # Rotas protegidas (layout com sidebar)
-│   │   ├── dashboard/        # Visão geral e gráficos
-│   │   ├── etapas/           # Lista e detalhe de etapas
-│   │   ├── kanban/           # Visão Kanban
-│   │   ├── calendario/       # Visão mensal de prazos
-│   │   ├── roadmap/          # Gantt interativo
-│   │   └── configuracoes/    # Configurações do sistema
-│   ├── api/                  # API Routes
-│   └── layout.tsx            # Root layout
-├── components/
-│   ├── layout/               # Sidebar, Header, Busca Global, Notificações
-│   ├── etapas/               # Componentes de etapa
-│   ├── dashboard/            # Gráficos e Botão PDF
-│   ├── kanban/               # Board Kanban
-│   ├── calendario/           # Calendário mensal
-│   ├── roadmap/              # Componentes do roadmap
-│   └── ui/                   # shadcn/ui
-├── lib/
-│   ├── prisma.ts             # Singleton do Prisma Client
-│   ├── validations/          # Schemas Zod
-│   ├── queries/              # Funções server-side
-│   ├── lembretes.ts          # Cálculo de lembretes
-│   ├── calendar.ts           # Geração de .ics e Google Agenda
-│   ├── email.ts              # Envio de e-mails
-│   ├── log.ts                # Registro de histórico
-│   └── gerar-pdf.ts          # Geração de relatório PDF
-├── prisma/
-│   ├── schema.prisma         # Schema do banco
-│   └── seed.ts               # Seed inicial
-└── scripts/                  # Scripts utilitários
+app/
+  (dashboard)/        Telas do sistema
+  api/                Rotas de API
+    tcc/              Endpoints do módulo de TCC
+components/           Componentes da interface, incluindo components/ui/
+lib/
+  tcc/                Schemas, validação, autorização e serviços do módulo de TCC
+  validations/        Schemas de validação compartilhados
+  queries/            Consultas server-side
+prisma/
+  schema.prisma       Modelos de dados e relações
+  migrations/         Histórico de migrations do banco
+  seed.ts             Seed de desenvolvimento
+scripts/              Scripts de setup e tarefas auxiliares
 ```
 
----
-
-## 🧪 Testes
+## Comandos de desenvolvimento e validação
 
 ```bash
-# Rodar todos os testes unitários
+npm run dev
 npm test
-
-# Rodar testes em watch mode
-npm run test:watch
-
-# Rodar testes E2E (Playwright)
-npm run test:e2e
-
-# Rodar testes E2E com interface visual
-npm run test:e2e:ui
+npx tsc --noEmit
+npx prisma validate
+npx prisma generate
+npm run build
+git diff --check
 ```
 
----
+`npm run dev` inicia o servidor local. Os demais comandos verificam testes,
+tipos, schema e geração do Prisma, build de produção e whitespace do diff,
+respectivamente. Testes E2E, quando necessários, podem ser executados com
+`npm run test:e2e`.
 
-## 🌐 Deploy
+## Commits e alterações locais
 
-### Vercel (recomendado)
-1. Importe o repositório no Vercel.
-2. Configure as variáveis de ambiente (veja seção anterior).
-3. Configure o cron em `vercel.json` (já incluído no projeto).
-4. Deploy.
-
-### Banco de Dados
-O projeto usa PostgreSQL. Para produção, recomendamos:
-- **Neon** (free tier): https://neon.tech
-- **Supabase** (free tier): https://supabase.com
-
----
-
-## 📚 Metodologia
-
-O desenvolvimento seguiu o **Spec-Driven Development (SDD)**, utilizando IA (Gemini Code Assist) e o GitHub Spec Kit para transformar intenção em especificações executáveis antes de codificar. Cada etapa do TCC foi planejada de forma atômica, com entregáveis claros e critérios de conclusão (Definition of Done).
-
----
-
-## 👨‍💻 Autor
-
-**Ramon M. Silva* — Sistemas de Informação, IFMA  
-**Orientador:** Prof. Dr. Hélder Pereira Borges  
-**Ano:** 2026.2
+Prefira commits atômicos, com uma única intenção, seguindo
+[Conventional Commits](https://www.conventionalcommits.org/), por exemplo
+`docs: atualiza README do módulo TCC`. Antes de preparar um commit, confira
+`git status` e revise o diff; adicione somente os arquivos da tarefa. Preserve
+alterações preexistentes no worktree: não as descarte nem as inclua
+acidentalmente no commit.

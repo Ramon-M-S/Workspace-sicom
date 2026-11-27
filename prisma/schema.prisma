@@ -14,20 +14,254 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum StatusVersaoModeloInstitucional {
+  RASCUNHO
+  PUBLICADA
+  ARQUIVADA
+}
+
+enum PapelMembroProjetoTcc {
+  PROPRIETARIO
+  COAUTOR_EDITOR
+  ORIENTADOR
+  REVISOR
+}
+
+enum ModoSecaoTcc {
+  MANUAL
+  AUTOMATICO
+  HIBRIDO
+}
+
+enum StatusSecaoTcc {
+  RASCUNHO
+  EM_ANDAMENTO
+  EM_REVISAO
+  CONCLUIDA
+  ARQUIVADA
+}
+
+enum EscopoComentarioSecaoTcc {
+  GERAL
+  TRECHO
+}
+
+enum EstadoAncoraComentarioSecaoTcc {
+  ATIVO
+  TEXTO_ALTERADO
+  BLOCO_REMOVIDO
+}
+
 model Usuario {
-  id            String         @id @default(cuid())
-  nome          String
-  email         String         @unique
-  senhaHash     String
-  criadoEm      DateTime       @default(now())
-  fases         Fase[]
-  etapas        Etapa[]
-  anotacoes     Anotacao[]
-  anexos        Anexo[]
-  logs          LogAlteracao[]
-  configuracoes Configuracao[]
+  id                  String               @id @default(cuid())
+  nome                String
+  email               String               @unique
+  senhaHash           String
+  criadoEm            DateTime             @default(now())
+  fases               Fase[]
+  etapas              Etapa[]
+  anotacoes           Anotacao[]
+  anexos              Anexo[]
+  logs                LogAlteracao[]
+  configuracoes       Configuracao[]
+  membrosProjetosTcc  MembroProjetoTcc[]
+  versoesSecoesTcc    VersaoSecaoTcc[]     @relation("AutorVersaoSecaoTcc")
+  comentariosTcc      ComentarioSecaoTcc[] @relation("AutorComentarioSecaoTcc")
+  arquivosTccEnviados ArquivoTcc[]         @relation("EnviadoPorArquivoTcc")
 
   @@map("usuarios")
+}
+
+model ModeloInstitucional {
+  id           String                      @id @default(cuid())
+  nome         String
+  descricao    String?
+  instituicao  String?
+  ativo        Boolean                     @default(true)
+  criadoEm     DateTime                    @default(now()) @db.Timestamptz(3)
+  atualizadoEm DateTime                    @updatedAt @db.Timestamptz(3)
+  versoes      VersaoModeloInstitucional[]
+
+  @@index([nome])
+  @@index([ativo])
+  @@map("modelos_institucionais")
+}
+
+model VersaoModeloInstitucional {
+  id                    String                          @id @default(cuid())
+  modeloInstitucionalId String
+  modeloInstitucional   ModeloInstitucional             @relation(fields: [modeloInstitucionalId], references: [id], onDelete: Cascade)
+  numeroVersao          Int
+  status                StatusVersaoModeloInstitucional @default(RASCUNHO)
+  definicaoJson         Json                            @db.JsonB
+  resumo                String?
+  publicadoEm           DateTime?                       @db.Timestamptz(3)
+  arquivadoEm           DateTime?                       @db.Timestamptz(3)
+  criadoEm              DateTime                        @default(now()) @db.Timestamptz(3)
+  projetos              ProjetoTcc[]
+
+  @@unique([modeloInstitucionalId, numeroVersao])
+  @@index([modeloInstitucionalId, status])
+  @@map("versoes_modelos_institucionais")
+}
+
+model ProjetoTcc {
+  id                  String                    @id @default(cuid())
+  versaoModeloId      String
+  versaoModelo        VersaoModeloInstitucional @relation(fields: [versaoModeloId], references: [id], onDelete: Restrict)
+  snapshotModeloJson  Json                      @db.JsonB
+  titulo              String
+  subtitulo           String?
+  resumo              String?
+  palavrasChave       String[]                  @default([])
+  instituicao         String?
+  curso               String?
+  programa            String?
+  campus              String?
+  cidade              String?
+  estado              String?
+  pais                String?
+  anoConclusao        Int?
+  dataInicioPrevista  DateTime?                 @db.Timestamptz(3)
+  dataEntregaPrevista DateTime?                 @db.Timestamptz(3)
+  dataDefesaPrevista  DateTime?                 @db.Timestamptz(3)
+  criadoEm            DateTime                  @default(now()) @db.Timestamptz(3)
+  atualizadoEm        DateTime                  @updatedAt @db.Timestamptz(3)
+  autores             AutorTcc[]
+  membros             MembroProjetoTcc[]
+  secoes              SecaoTcc[]
+  arquivos            ArquivoTcc[]
+
+  @@index([versaoModeloId])
+  @@index([titulo])
+  @@index([dataEntregaPrevista])
+  @@map("projetos_tcc")
+}
+
+model AutorTcc {
+  id          String     @id @default(cuid())
+  projetoId   String
+  projeto     ProjetoTcc @relation(fields: [projetoId], references: [id], onDelete: Cascade)
+  ordem       Int
+  nome        String
+  email       String?
+  matricula   String?
+  curso       String?
+  instituicao String?
+  criadoEm    DateTime   @default(now()) @db.Timestamptz(3)
+
+  @@unique([projetoId, ordem])
+  @@index([projetoId])
+  @@map("autores_tcc")
+}
+
+model MembroProjetoTcc {
+  id           String                @id @default(cuid())
+  projetoId    String
+  projeto      ProjetoTcc            @relation(fields: [projetoId], references: [id], onDelete: Cascade)
+  usuarioId    String
+  usuario      Usuario               @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  papel        PapelMembroProjetoTcc
+  ativo        Boolean               @default(true)
+  criadoEm     DateTime              @default(now()) @db.Timestamptz(3)
+  atualizadoEm DateTime              @updatedAt @db.Timestamptz(3)
+
+  @@unique([projetoId, usuarioId])
+  @@index([usuarioId, ativo])
+  @@index([projetoId, papel, ativo])
+  @@map("membros_projeto_tcc")
+}
+
+model SecaoTcc {
+  id                  String               @id @default(cuid())
+  projetoId           String
+  projeto             ProjetoTcc           @relation(fields: [projetoId], references: [id], onDelete: Cascade)
+  secaoPaiId          String?
+  secaoPai            SecaoTcc?            @relation("HierarquiaSecaoTcc", fields: [secaoPaiId], references: [id], onDelete: Cascade)
+  subsecoes           SecaoTcc[]           @relation("HierarquiaSecaoTcc")
+  ordem               Int
+  titulo              String
+  categoria           String
+  modo                ModoSecaoTcc         @default(MANUAL)
+  conteudoJson        Json                 @db.JsonB
+  revisaoAtual        Int                  @default(0)
+  status              StatusSecaoTcc       @default(RASCUNHO)
+  concluida           Boolean              @default(false)
+  dataInicioPrevista  DateTime?            @db.Timestamptz(3)
+  dataEntregaPrevista DateTime?            @db.Timestamptz(3)
+  criadoEm            DateTime             @default(now()) @db.Timestamptz(3)
+  atualizadoEm        DateTime             @updatedAt @db.Timestamptz(3)
+  versoes             VersaoSecaoTcc[]
+  comentarios         ComentarioSecaoTcc[]
+  arquivos            ArquivoTcc[]
+
+  @@index([projetoId, ordem])
+  @@index([projetoId, secaoPaiId, ordem])
+  @@index([status, dataEntregaPrevista])
+  @@map("secoes_tcc")
+}
+
+model VersaoSecaoTcc {
+  id             String   @id @default(cuid())
+  secaoId        String
+  secao          SecaoTcc @relation(fields: [secaoId], references: [id], onDelete: Cascade)
+  numeroVersao   Int
+  revisaoBase    Int
+  conteudoJson   Json     @db.JsonB
+  origem         String
+  resumo         String?
+  autorUsuarioId String
+  autorUsuario   Usuario  @relation("AutorVersaoSecaoTcc", fields: [autorUsuarioId], references: [id], onDelete: Restrict)
+  criadoEm       DateTime @default(now()) @db.Timestamptz(3)
+
+  @@unique([secaoId, numeroVersao])
+  @@index([secaoId, revisaoBase])
+  @@index([autorUsuarioId, criadoEm])
+  @@map("versoes_secoes_tcc")
+}
+
+model ComentarioSecaoTcc {
+  id             String                         @id @default(cuid())
+  secaoId        String
+  secao          SecaoTcc                       @relation(fields: [secaoId], references: [id], onDelete: Cascade)
+  escopo         EscopoComentarioSecaoTcc
+  blockId        String?
+  trechoCitado   String?
+  offsetInicio   Int?
+  offsetFim      Int?
+  estadoAncora   EstadoAncoraComentarioSecaoTcc @default(ATIVO)
+  conteudo       String
+  resolvido      Boolean                        @default(false)
+  autorUsuarioId String
+  autorUsuario   Usuario                        @relation("AutorComentarioSecaoTcc", fields: [autorUsuarioId], references: [id], onDelete: Restrict)
+  criadoEm       DateTime                       @default(now()) @db.Timestamptz(3)
+  atualizadoEm   DateTime                       @updatedAt @db.Timestamptz(3)
+
+  @@index([secaoId, resolvido, criadoEm])
+  @@index([secaoId, blockId])
+  @@index([autorUsuarioId, criadoEm])
+  @@map("comentarios_secoes_tcc")
+}
+
+model ArquivoTcc {
+  id           String     @id @default(cuid())
+  projetoId    String
+  projeto      ProjetoTcc @relation(fields: [projetoId], references: [id], onDelete: Cascade)
+  secaoId      String?
+  secao        SecaoTcc?  @relation(fields: [secaoId], references: [id], onDelete: SetNull)
+  nomeOriginal String
+  mimeType     String
+  tamanhoBytes BigInt
+  chaveStorage String     @unique
+  categoria    String
+  enviadoPorId String
+  enviadoPor   Usuario    @relation("EnviadoPorArquivoTcc", fields: [enviadoPorId], references: [id], onDelete: Restrict)
+  criadoEm     DateTime   @default(now()) @db.Timestamptz(3)
+
+  @@index([projetoId, categoria])
+  @@index([secaoId])
+  @@index([enviadoPorId, criadoEm])
+  @@map("arquivos_tcc")
 }
 
 model Configuracao {
